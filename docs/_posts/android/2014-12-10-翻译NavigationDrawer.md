@@ -8,7 +8,8 @@ tag: SupportDesign
 
 **抽屉式导航是Google应用程序中一种常见的模式。抽屉导航从左侧滑出，它遵循列表的关键设计线和标准。**
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_metrics1.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_metrics1.png) 
+
 
 **排版样式**
 字体，字号，颜色：  
@@ -18,7 +19,7 @@ tag: SupportDesign
 4. 副标题: Roboto Medium, 14sp, 54% #000000。对其到16dp关键设计线。 
 
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_metrics2.png)   
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_metrics2.png)   
 
 **垂直关键设计线和水平间距**
 
@@ -31,7 +32,7 @@ tag: SupportDesign
 在手机上使用16dp的水平距离，在平板则上使用24dp。
 
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_metrics3.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_metrics3.png) 
 
 **垂直间距**
 
@@ -47,7 +48,7 @@ tag: SupportDesign
 
 抽屉导航的占据了屏幕的全部高度，并且抽屉导航在状态栏的下方。抽屉下方所有的东西会覆盖一层阴影（scrim）而变暗。阴影下的所有内容依然是可见的。
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_elevation1.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_elevation1.png) 
 
 **Android上的抽屉导航**
 
@@ -57,23 +58,23 @@ tag: SupportDesign
 
 如果这种颜色触摸纹波/高亮不能与程序主色调形成足够的对比，那么就使用的程序主色的暗色调。
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_selection1.png) 
-![](./_image/Navigation_Drawer/patterns_navdrawer_selection2.png) 
-![](./_image/Navigation_Drawer/patterns_navdrawer_selection3.png) 
-![](./_image/Navigation_Drawer/patterns_navdrawer_selection4.png) 
-![](./_image/Navigation_Drawer/patterns_navdrawer_selection5.png) 
-![](./_image/Navigation_Drawer/patterns_navdrawer_selection6.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_selection1.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_selection2.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_selection3.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_selection4.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_selection5.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_selection6.png) 
 
 
 ##**分隔线**##
 
 在导航抽屉里所有分割线都是完全在抽屉面板内部。此外，在分隔线上方和下方均有8dp的间距。
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_dividers1.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_dividers1.png) 
 
 **上下文**
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_dividers2.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_dividers2.png) 
 
 **8 dp 垂直间距**
 
@@ -81,8 +82,8 @@ tag: SupportDesign
 
 抽屉导航可以像任何普通视图一样滚动。
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_scrolling1.png) 
-![](./_image/Navigation_Drawer/patterns_navdrawer_scrolling2.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_scrolling1.png) 
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_scrolling2.png) 
  
 
 
@@ -93,11 +94,11 @@ tag: SupportDesign
 
 如果在导航抽屉中的内容列表很长，设置和支持这两项可以被钉在导航抽屉的底部（译者：非列表底部）较高一层的视图上。该视图层（显示设置和支持的视图层）只有在列表显示顶部的时候才显示;任何在其他的位置的滚动会立即使该视图层消失，并且把设置和支持这两项加到列表底部，与列表内容的其余部分排成列。当关闭和重​​新打开抽屉式导航的时候，抽屉导航保持其滚动到的位置。（译者：其实现在的Play商店和Gmail都没有严格按照这个标准来。从Inbox上倒是可以看到一点影子。2014-12-10）
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_settings1.png)
-![](./_image/Navigation_Drawer/patterns_navdrawer_settings2.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_settings1.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_settings2.png)
 
 如果列表不用滚动，那么设置和支持项会在列表底部显示，而且不用被钉在底部。
 
-![](./_image/Navigation_Drawer/patterns_navdrawer_settings3.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/Navigation_Drawer/patterns_navdrawer_settings3.png)
 
 原文链接：[http://www.google.com/design/spec/patterns/navigation-drawer.html](http://www.google.com/design/spec/patterns/navigation-drawer.html "Navigation Drawer")

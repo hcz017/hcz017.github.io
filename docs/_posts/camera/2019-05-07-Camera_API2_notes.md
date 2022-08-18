@@ -5,7 +5,7 @@ title:  'Camera API2 学习记录'
 # Camera API 2 学习记录
 
 本文是学习camera API 2 过程一些的记录。文档大部分来自官网，代码基本上来自Google [Camera2Basic](https://github.com/googlesamples/android-Camera2Basic)。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2019050710381876.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/camera/_image/CAM_API2_ARCH.png)
 
 # 1. 几个主要部分
 
@@ -29,7 +29,7 @@ mCameraDevice.createCaptureSession()
 ## 2.1 复制一个主摄的预览
 
 在createCaptureSession(List<Surface> outputs, CameraCaptureSession.StateCallback callback, Handler handler) 的第一个参数，添加一个surface 到list，这个surface 直接由view 上的TextureView 而来，同时这个surface 需要通过到CaptureRequest.Builder 的addTarget 方法添加到preview 的request 中去，之后预览内容将会直接显示到该控件上。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511213847689.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/camera/_image/CAM_API2_cp_preview.png)
 参考代码： https://github.com/hcz017/android-Camera2Basic/tree/add_another_main_preview
 ## 2.2 添加另一个格式的预览数据并显示
 
@@ -43,7 +43,7 @@ mSecImageReader = ImageReader.newInstance(secLargest.getWidth(),
 ```
 
 之后要把这个ImagerReader 的surface 添加到preview 的request.builder 和createCaptureSession 的surface list 中去 `mPreviewRequestBuilder.addTarget(mSecImageReader.getSurface());` 之后通过`onImageAvailable` 的回调就可以取得实时预览的数据，通过格式转换把数据转换成bitmap 就可以draw 到TextureView 上(从性能上考虑这不是最优方案)。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511213937376.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/camera/_image/CAM_API2_add_other_format_preview.png)
 如果添加到拍照的request 中去，则会在拍照时候回调onImageAvailable，同时拍两种格式的照片就是这样做到的。
 参考代码： https://github.com/hcz017/android-Camera2Basic/tree/sec_format_preview
 
@@ -61,7 +61,7 @@ drawFrame(mSurfaceTexture, holder.width, holder.height,
 那么在API 2 上我想到的一个方法便是，在渲染到屏幕上之前截取预览数据，把图像内容变换后再渲染显示。
 
 这里就用到了自定义的 GLSurfaceView，把GLSurfaceView 作为显示预览的控件，GLSV 的surface 添加到builder 和createCaptureSession 的surface list，之后通过修改映射点的位置，把左右调换顺序实现预览图象的水平翻转。这里没有用到ImageReader，如果需要其他格式或者二次处理需求可以使用ImageReader 获得数据后再绘制到GLSurfaceView 上。
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20190511214033411.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![在这里插入图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/camera/_image/CAM_API2_flip_preview.png)
 参考代码： https://github.com/hcz017/android-Camera2Basic/tree/mirror_flip_front_camera_preview
 # 4. 问题
 

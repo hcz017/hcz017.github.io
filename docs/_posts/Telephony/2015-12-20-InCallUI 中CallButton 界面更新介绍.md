@@ -7,7 +7,7 @@ title: 'InCallUI 中CallButton 界面更新介绍（audioButton等）'
 
 我们先来看一下CallButtonFragment在incall screen界面的位置，如下图：
 
-![incall](./_image/callButtonFragment.png?imageView2/2/w/600)
+![incall](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButtonFragment.png?imageView2/2/w/600)
 
 大框里面就是CallButtonFragment，我们这次要说的东西也都在这里面。
 从左到右 1. audioButton是显示当前通话声音从哪里传出去；2.muteButton点击以后收集不再录入自己这边的声音；3.dialpadButton换出号码盘；4.holdButton 通话保持 5.overflowButton包含添加通话，黑名单，通话录音等。
@@ -23,24 +23,24 @@ title: 'InCallUI 中CallButton 界面更新介绍（audioButton等）'
 
 会有三个选项 “扬声器”、“手机听筒”、“蓝牙“（当前图标为选择了蓝牙）
 
-![callButton_audio_more](./_image/callButton_audio_more.png?imageMogr2/thumbnail/600)
+![callButton_audio_more](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButton_audio_more.png?imageMogr2/thumbnail/600)
 
 连接蓝牙耳机+插入有线耳机
 
 手机听筒会变为“有线耳机”
 
-![callButton_audio_bt&wl](./_image/callButton_audio_bt&wl.png?imageMogr2/thumbnail/600)
+![callButton_audio_bt&wl](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButton_audio_bt&wl.png?imageMogr2/thumbnail/600)
 
 选择有线耳机和手机听筒后显示的图标是一样的
 
-![callButton_audio_wl](./_image/callButton_audio_wl.png?imageView2/2/w/600)
+![callButton_audio_wl](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButton_audio_wl.png?imageView2/2/w/600)
 
 ##负责显示的代码
 看完了显示效果下面我们来说一下界面更新的相关的代码。CallButtonFragment.java中有三个比较重要的方法用来显示和更新显示audioButton和audioMode popMenu，它们分别是updateAudioButtons()，showAudioModePopup()和refreshAudioModePopup()。
 
 1. updateAudioButtons()  选择一个图标显示在audioButton的位置。这里涉及到一个audioRoute优先级的问题，在连接了蓝牙耳机后会优先通过蓝牙耳机播放声音，也就表示这时候会显示蓝牙耳机的图标
 
-	![](./_image/callButton_audio_bluetooth.png?imageView2/2/w/600)
+	![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButton_audio_bluetooth.png?imageView2/2/w/600)
 
 	```java
         private void updateAudioButtons(int supportedModes) {
@@ -208,7 +208,7 @@ title: 'InCallUI 中CallButton 界面更新介绍（audioButton等）'
 onMenuItemClick来判断选择了哪一项，并通过getPresenter().setAudioRoute(mode)，进一步调用到TelecommAdapter的setAudioRoute来设置audioRoute，选择相应的设备设置成功后，通过前面提到的updateAudioButtons()来更新，但要注意比较关键的一点，就是isAudio()和isSupported()的返回值都是正确的才能得到期望的效果。之前遇到一个bug，上层看起来都是正常的，但是会出现没连蓝牙耳机却显示蓝牙的现象，这就是由于较下层的地方没有更新正确的当前支持的audioRoute设备，导致上层以为所有的设备都是可用的。
 setAudioRoute 以及更新的流程图：
 
-![](./_image/callButton_setAudioRoute.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButton_setAudioRoute.jpg)
 
 第12步的时候设置audioRoute(或者设置mute)，更下层的工作交由framework/base/media的AudioManager完成，我们不继续深追。
 这里通过CallsManager.getInstance().onAudioStateChanged()更新audio的变化
@@ -255,7 +255,7 @@ setAudioRoute 以及更新的流程图：
 然后在向上更新的时候调用到了前面我们说到的三个比较重要的方法。
 把上面的流程图简化一下我们得到：
 
-![](./_image/CallButton_audio%20_simp.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallButton_audio%20_simp.png)
 
 注意telecomm层的Phond，因为audio route是不区分call的所以这里是通过phone操作的，而后面的hold则要区分call，所以中间的方法会带callId作为参数。
 
@@ -269,11 +269,11 @@ mute实际上也是对audio的设置，流程参考上面audio更改的流程图
 设置hold
 到达RIL.java后我们不继续深追了，这里要说名的一点是17步并不是紧接着16步之后的，而是向上更新的开始。那么什么时候开始向上更新的呢？我们知道hold call这个动作一定是在已经成功建立起一个call的基础上的，而call的连接在建立的时候会通过[RegistrantList消息处理机制](http://blog.csdn.net/aaa111/article/details/43833757)注册一个消息MSG_PRECISE_CALL_STATE_CHANGED，而在hold call成功后会TelephonyConnection会收到并进一步处理这个消息，在hold call的这个场景中便是向上更新hold的state。
 
-![callbutton_overflow](./_image/CallButton_hold_setHold.jpg)
+![callbutton_overflow](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallButton_hold_setHold.jpg)
 
 hold成功向上更新
 
-![callbutton_overflow](./_image/CallButton_hold_update.jpg)
+![callbutton_overflow](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallButton_hold_update.jpg)
 
 上面是设置成功的时序图，如果因为网络原因或者modem出错的话，hold是可能不成功的，这时候可能会看到两种现象，一个是holdButton显示checked后立刻回复unChecked，还一个是提示“Unable to switch call”
 
@@ -286,6 +286,6 @@ hold成功向上更新
 ```
 初始有3个：speaker，mute，dialpd。
 
-![callbutton_overflow](./_image/callbutton_overflow.png?imageView2/2/w/600)
+![callbutton_overflow](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callbutton_overflow.png?imageView2/2/w/600)
 
 选项除了下面两个还可能包括“通话录音”，在多路通话中“合并通话”也会在这里显示。如果开启了黑名单功能，一般也会收在这里。

@@ -52,4 +52,4 @@ app:contentScrim="?attr/colorPrimary"//一般会写成透明或者半透明
 如果你已经在**style**里面把状态栏设置成了透明，那么CollapsingToolbarLayout也想要透明效果的话就无需设置了。
 
 设置半透明和透明的效果如下（两边都是紫色）：
-![](./_image/ADW_collapsingToolbarLayout.gif-csdn)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/ADW_collapsingToolbarLayout.gif)

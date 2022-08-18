@@ -16,11 +16,11 @@ DrawingView的原型来自[**DrawingView-Android**](https://github.com/mukeshsol
 ## 效果展示
 gif效果展示：
 
-![](./_image/DrawingView.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/DrawingView.gif)
 
 保存的图片：
 
-![](./_image/DrawImg.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/DrawImg.png)
 
 ## 基本功能
 

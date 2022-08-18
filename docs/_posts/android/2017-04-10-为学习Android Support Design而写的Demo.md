@@ -10,7 +10,7 @@ tags: SupportDesign
 
 ## 效果图
 
-![](./_image/asd/NavigationView.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/NavigationView.png)
 
 ## 注意点
 
@@ -32,7 +32,7 @@ tags: SupportDesign
 
 **有个坑**，就是状态栏的下端有时候会看到一个内阴影，找了一下发现原来是内容布局的根节点设置了`android:fitsSystemWindows="true"`，这个不需要哈，删了之后就显示成平面的了。下面是对比图：
 
-![](./_image/asd/status_diff.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/status_diff.png)
 
 # CollapsingToolbarLayout
 
@@ -40,7 +40,7 @@ tags: SupportDesign
 
 这其实是个对比图
 
-![](./_image/asd/ADW_collapsingToolbarLayout.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/ADW_collapsingToolbarLayout.gif)
 
 ## 注意点
 
@@ -92,25 +92,25 @@ PS：不要吐槽审美，为了凸显效果才这样的。
 # TextInputLayout和Snackbar
 ## 效果图
 
-![](./_image/asd/inputlayout&snkb.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/inputlayout&snkb.gif)
 
 ## 注意点
 想要Snackbar可以滑动消除，需要把它放在CoordinatorLayout里面
 # RecyclerView
 ## 效果图
 
-![](./_image/asd/recyvlerview.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/recyvlerview.gif)
 
 这个没啥说的
 # AnimatedVectorDrawable
 ## 效果图
 
-![](./_image/asd/animatedVectorDrawable.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/animatedVectorDrawable.gif)
 
 矢量图动画，另外还有tween animation等没加进来。
 # TabLayout
 ## 效果图
 
-![](./_image/asd/tablayout.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/asd/tablayout.gif)
 
 和palette一起应用的

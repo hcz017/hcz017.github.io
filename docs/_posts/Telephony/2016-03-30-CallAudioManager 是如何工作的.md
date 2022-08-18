@@ -8,7 +8,7 @@ title: ' CallAudioManager 是如何工作的'
 CallAudioManager是干啥的呢？单词分来来写 Call Audio Manager，一个管理通话中音频状态的类。
 #初始化
 一张图看清CallAudioManager怎么来的 。
-![](./_image/CallAudioManager.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallAudioManager.jpg)
 
 在TeleService创建的时候对TelecomGlobals进行初始化，然后new出一个CallsManager，在CallsManager.java的构造函数中new出一个CallAudioManager()，带三个参数CallAudioManager(context, statusBarNotifier, mWiredHeadsetManager)。
 #文件结构
@@ -17,7 +17,7 @@ CallAudioManager是干啥的呢？单词分来来写 Call Audio Manager，一个
         implements WiredHeadsetManager.Listener {`
 CallAudioManager.java继承CallsManagerListenerBase.java（其实就是CallsManager的CallsManagerListener接口），实现WiredHeadsetManager.Listener()，
 因此它重写了CallsManagerListenerBase中的一系列方法，实现了WiredHeadsetManager的接口onWiredHeadsetPluggedInChanged()，见下图：
-![](./_image/CallAudioManager_extends_implements.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallAudioManager_extends_implements.png)
 从这张图里面我们可以大致了解到CallAudioManager关心的一些事情，在Call发生变化的时候，在
 有线耳机插入/拔出的时候，这个类会做一些操作设置，保存或者更新Audio的一些信息。看到onWiredHeadsetPluggedInChanged()这个方法，可能有些人就想到 了，既然有一个方法关心有线耳机的插入/拔出状态的变化，那怎么没有一个方法处理**蓝牙耳机**连接/断开的状态呢？实际上是有的，只不过它不是像有线耳机那样是通过实现接口实现的，而是在内部写了几个方法监听处理蓝牙的状态，其中一个与有线耳机插入/拔出对应的方法就是onBluetoothStateChange()。
 通过下面这段CallAudioManager的构造函数可以看到，在CallAudioManager初始话的时候new了一个BluetoothManager()，
@@ -96,10 +96,10 @@ CallAudioManager.java继承CallsManagerListenerBase.java（其实就是CallsMana
 起先我是想写“audio更新”的，但是为什么改成“CallAudio更新”呢？因为这个audio跟call的关系太密切了，可以说call不存在audio就不存在，而且Android M上很多跟call有关的audio相关的类，都由Audio更名为CallAudio了（如AudioState.java -> CallAudioState.java）。
 前面说到这个类里面最重要的方法是setSystemAudioState()，那么看一下调用层级：
 
-![](./_image/CallAudioManager_callstack.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallAudioManager_callstack.jpg)
 然后画成示意图的形式：
 
-![](./_image/CallAudioManager_setSystemAudioState.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallAudioManager_setSystemAudioState.png)
 结合代码对上图解读一下。（圆形的setSystemAudioState(）和右侧的圆角长方形方法同名，携带参数不一样）
 左侧的圆角长方形表示“设置为默认的audio state”调用这个方法的时候，不用携带audio相关的参数，方法内会自己生成一个初始化的audioState。两个椭圆代表的场景是“所有通话被移除，恢复默认值”，和“满足‘从不是VoiceCall到VoiceCall’的时候设置一个初始化的audioState”。
 右侧圆角长方形表示“设置audio state”，调用这个方法带4个参数，分别是：强制设置，是否mute，audioState，当前所有支持的audioState。

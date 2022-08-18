@@ -50,7 +50,7 @@ date: 2014-12-11 15:20
 	}
 运行效果如下：
 
-![](./_image/hello_185351138.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_185351138.jpg)
 
    OK，上面的程序出问题的原因是单线程，那么我们可以再创建一个线程去处理耗时操作，就不会阻碍主UI的操作了：
    改动上面的程序如下：
@@ -101,7 +101,7 @@ date: 2014-12-11 15:20
 	    }
 	}
    运行效果如下：
-![](./_image/hello_192914506.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_192914506.png)
    代码写到这里，ANR错误就解决了，但是又出现一个新的问题，如果我想把利用新的线程来更新主UI线程，可以不可以呢，好吧，我们用上面的程序试一试，加一个TextView来接收新的线程中自增的数据，看看是否能实现：
    程序修改如下：
 
@@ -145,7 +145,7 @@ date: 2014-12-11 15:20
 	}
 
    运行效果如下：
-![](./_image/hello_192348528.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_192348528.jpg)
 
    我们可以看到程序被意外终止了，那么说明其他线程是不能更改主UI的数据的，除非...除非我们往下看...
 
@@ -219,8 +219,8 @@ date: 2014-12-11 15:20
 	    };
 	}
    运行结果如下：
-![](./_image/hello_194146734.jpg)
-![](./_image/hello_194146231.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_194146734.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_194146231.jpg)
    看到了吧，主UI的数据是不是更新了呢，很是神奇吧，这就是线程之间的通信了。
    接下来我们要继续讲一个线程通信的机制。。。
 
@@ -263,20 +263,20 @@ date: 2014-12-11 15:20
 	    }
 	}
    运行效果如下：
-![](./_image/hello_195758374.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_195758374.jpg)
 
    如果把上面等待的时间改为5以内，则就是典型的卡屏的例子了，试试看吧：
 初始界面：
-![](./_image/hello_200316867.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_200316867.jpg)
 
 点击下面的按钮：
-![](./_image/hello_200228728.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_200228728.jpg)
 
 点击上面的按钮：此时就卡住了，屏幕什么都干不了了
-![](./_image/hello_200228148.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_200228148.jpg)
 
 卡屏期间点击了多少下下边的按钮，5秒之后都会显示出来：
-![](./_image/hello_200228720.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_200228720.jpg)
 上面就是经典的卡屏的例子，怎么解决呢？当然是：AsyncTask了
 （2）使用AsyncTask创建后台进程，解决卡屏问题：
 代码如下：
@@ -445,11 +445,11 @@ MyAsyncTask.java：
 	}
 运行效果如下：
 
-![](./_image/hello_202739378.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_202739378.jpg)
 
-![](./_image/hello_202739206.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_202739206.jpg)
 
-![](./_image/hello_202739491.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/hello_202739491.jpg)
 
 好了。今天的内容就到这里了，希望真的能帮到你，如果有需要改进的地方请多多指出批评和指点，我欣然接受哦O(∩_∩)O哈哈~
 

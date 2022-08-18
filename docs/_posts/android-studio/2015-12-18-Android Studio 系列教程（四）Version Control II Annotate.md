@@ -15,12 +15,12 @@ Version Control in Android Studio II
 简单分析后就是负责显示来电的界面没有消失,自然的我们去查看InCallActivity的finish()方法.
 
 下面我们就来用一下Annotate功能:
-![](./_image/AS4_annotate.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/AS4_annotate.png)
 
 我们把鼠标放到if (!hasPendingErrorDialog() && !mAnswerFragment.hasPendingDialogs()) { 这行代码对应的左侧，然后就显示出如上图的信息，包括commit id，作者，日期，commit message和changeId。
 
 点击的话则会弹出新的窗口
-![](./_image/AS4_paths_affected.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/AS4_paths_affected.png)
 这个窗口里显示出了本次提交修改了那些文件，双击一个文件则显示本次这个文件修改了那些内容。
 要注意的一点是，你在不同的log上点击Annotate的话，得到的是不同的结果，即每次显示的是那个版本的文件的信息，以及那个文件包括的内容的各行修改历史。
 
@@ -45,11 +45,11 @@ Version Control in Android Studio II
 的时候mPhone的值已经为null了，然后不能够继续执行了（其实就算这里可以执行过去，后面仍然不能发送短信，因为call不存在了）。
 那么我们就生出一个疑问：为什么以前可以顺利的执行下去，现在却不可以了呢？难道以前这个条件是满足的么？
 我们继续看，这行代码的修改时间：2014.07.15。
-![](./_image/AS4_over_view.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/AS4_over_view.png)
 可以看到这次貌似是个大工程，改了很多的文件，实际上我们点进去看的话也会发现，这次确实是改了很多的东西。
 
 而我们关注的是：
-![](./_image/AS4_diff.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/AS4_diff.png)
 
 可以看到判断条件改了。
 自此我们可以知道，电话断开后仍然可以发送短信的功能是在2013.10.08添加的，这个功能可能一直正常使用到2014.07.14，然后由于其他原因代码在2014.07.15更改，导致原有流程走不通了。（一年多了都没有人发现这个问题么？）
@@ -63,7 +63,7 @@ Version Control in Android Studio II
 ```
 改起来也容易，但是我觉得如果这个功能是某人添加的话，不应该犯这种简单的错误。
 依旧用Annotate看历史。很容易我们找到这个功能是2010年添加的：
-![](./_image/AS4_previes_annotate.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/AS4_previes_annotate.png)
 
 并且在后面的几条提交中加入了mPhoneState变量来保存监听到的phone状态的变化值：
 ```java
@@ -73,7 +73,7 @@ Version Control in Android Studio II
 但是最新的代码中却没有这两行了，一般来说解bug的话看到这里也可以了，把上面那两行代码在重新加进去就可以解决问题了。
 如果想搞清楚来龙去脉，还可以再追一下什么时候给mPhoneState赋值的代码被改没油了。
 这一次要多花点时间，因为Annotate不显示不存在的代码的修改时间，其实这时候用查看单个文件的修改历史，点击该次修改要来的快些，不到2分钟我找到了引起这个问题对应的提交 2012.07.18代码clean up的时候把上面两行代码给删了！
-![](./_image/AS4_previes_diff.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/AS4_previes_diff.png)
 好了，到这里我们不仅知道了问题产生的原因（修改代码丢失代码块），连解法也一同找到了。
 
 顺便了解了一下这个解/锁屏功能的历史，2010.02.13添加，并在后续的几条提交中优化，但是在2012.07.18的时候的一次代码清理工作中删除了一部分代码，导致了现在的通话中仍然可以有解锁声音播放。你不觉得2012.07至2015.11这个问题都没有人修改过，时间未免太久了吧？

@@ -17,7 +17,7 @@ title: 'Audio in Video Call(Android_M)'
 比较明显的变化是 M上InCallUI中新增了一个类InCallAudioManager.java，见名知意，这是一个专门管理通话中Audio状态的类。
 先看一下这个类里有那些方法：
  
-![这里写图片描述](./_image/audio_InCallAudioManager_method.png)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_InCallAudioManager_method.png)
 图1: 文件结构
 从方法名上可以大致看出这是一个管理call在 upgrade、modify和merge时候去开启扬声器或听筒的类。
 先声明一点，enableSpeaekr()和enableEarpiece()两个方法不是被调用了就一定会产生AudioMode的变化，具体的判断条件我们放到最后再讲。
@@ -25,7 +25,7 @@ title: 'Audio in Video Call(Android_M)'
 我们先看一下两个方法的调用层级：
 ##enableSpeaker() 的调用层级
  
-![这里写图片描述](./_image/audio_enableSpeaker.jpg)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_enableSpeaker.jpg)
 图2： enableSpeaker()方法调用层级
 上面这张图可解释为3个打开Speaker的场景：
 1. 当点击合并通话时；
@@ -51,7 +51,7 @@ title: 'Audio in Video Call(Android_M)'
 ModifyCall有两种情况，我们放到下面跟enableEarpiece一起说。
  
 ##enableEarpiece()的调用层级
-![这里写图片描述](./_image/audio_enableEarpiece.jpg)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_enableEarpiece.jpg)
 图3: enableEarpiece()方法调用层级
 可以看到打开听筒的唯一调用地方是ModifyCall，ModifyCallClicked()方法代码如下：
 ```java
@@ -114,7 +114,7 @@ ModifyCall有两种情况，我们放到下面跟enableEarpiece一起说。
 2016.05.27 更新
 
 看图
-![](./_image/audio_Dialing.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_Dialing.jpg)
 上图中可以看出，在正在拨号的界面Speaker的状态就已经是打开的了，而从上面的分析中却没有代码执行对应的动作，那么这个Speaker是在什么地方打开的呢？
 CallsManager.java
 ```java
@@ -136,7 +136,7 @@ CallsManager.java
     }
 ```
 调用层级：
-![](./_image/audio_CallsManager.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_CallsManager.png)
 上面的代码解释了，在拨号界面Speaer就打开的原因。
 在CallsManager.java中新增了多个方法，上面只是其中一部分，实现的功能也是控制Speaker和Earpiece的开关，里面用的值是在哪里设置的呢？
 ```java

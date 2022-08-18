@@ -33,10 +33,10 @@ renderscriptNdkMode->renderscriptNdkModeEnabled
 ---
 #“Check out from GitHub”错误#
 如果出现以下或其他错误提示的（错误图列不一一列举），请参照下面的说明解决。
-![](./_image/QQ截图20141121180248.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/QQ截图20141121180248.png)
 **解决方法：**
 点击上面错误提示的OK，然后按照下图设置，之后先不要点OK，手动去修改文件。
-![](./_image/importprojectfromgradle.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/importprojectfromgradle.png)
 1. 修改项目目录下的build.gradle。修改后内容如下：
 
         classpath 'com.android.tools.build:gradle:0.12.2'         
@@ -63,7 +63,8 @@ renderscriptNdkMode->renderscriptNdkModeEnabled
 4. 如果有library文件（库）把库文件夹下的build.gradle做同3一样的修改。
 
 #原有的项目错误#
-![](./_image/gradlebaocuo.jpg)
+
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/gradlebaocuo.jpg)
 通常这时候“Jump to source”后把“runProguard()”（或其他的）删掉就好了。如果不行请尝试一下上面的1234步骤。
 PS：如果项目比较特殊，以上方法不保证解决出现的问题。
 

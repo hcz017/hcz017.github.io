@@ -15,7 +15,7 @@ title:  'android 11 模拟器root 的一些尝试'
 按照上面github 上方法的步骤，遇到的主要问题是，我们需要push 一个su 文件到系统分区，但是始终拿不到system 分区的写权限。
 即使使用命令行添加-writable-system 提示system image 可写，但实际上还是不可写。
 https://developer.android.com/studio/run/emulator-commandline#deprecated
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200912103047939.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70#pic_center)
+![在这里插入图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android-emulator-commandline.png)
 ```SHELL
 PS D:\Android\Sdk\emulator> .\emulator.exe -avd Pixel_3_API_R -no-boot-anim -writable-system -selinux permissive -qemu
 emulator: WARNING: System image is writable
@@ -41,7 +41,7 @@ PS D:\megvii\root_avd\SuperSU> adb shell mount -o rw,remount /system
 mount: '/system' not in /proc/mounts
 ```
 ls 可以看到根目录system 文件夹，但是df 看不到
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200912103240598.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70#pic_center)
+![在这里插入图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android-shell-system.png)
 system 分区没有挂载为可读，无法push 文件
 ```SHELL
 PS D:\megvii\root_avd\SuperSU> adb push .\x64\su /system/xbin/su

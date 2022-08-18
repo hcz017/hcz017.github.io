@@ -19,17 +19,17 @@ Google Bing Baidu， 各种搜索引擎尝试了一遍，尝试了多个关键�
   
 ## 方法二 反编译厂商apk  
 恰逢我的moto z 手机刷了oem test 版本的android 8.0，估计入为了满足入网条件，在系统的“紧急警报”中恰好就有“显示公共安全提示”这个开关。系统切换语言到英文后得到下图：  
-![](./_image/WEA_Emergency_alert_settings_en.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/WEA_Emergency_alert_settings_en.png)
 因为是厂商的ROM 包，已经把apk 包中的dex提取出来转成了odex， 而且很可能framework 已经定制过，所以仅反编译CellBroadcastReceiver.apk 可能会失败或者有其他问题，建议使用 SVADeodexerForArt自动合并框架工具重新合并得到apk。   
   
 打开SVADeodexerForArt ，选择我们解压好的目录至system下。依次全部勾选下面三个选项，点击Execute后就会出现下面这幅图的样子，只需要静静等待几分钟就可以了。他会将odex资源与apk进行合并。   
   
-![](http://upload-images.jianshu.io/upload\_images/1110736-25aea0aefc55bae8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)  
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/WEA_decompile_odex.png)  
   
 之后我们得到新的CellBroadcastReceiver.apk，之后按照常规的反编译方法即可。  
   
 使用jd-gui 工具查看反编译后的代码：  
   
-![](./_image/WEA_decompile_cellbroadcast_apk.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/WEA_decompile_cellbroadcast_apk.png)
   
 到这里我们就得到了 **Public Safety Alerts 对应的Identifer 为4396**。

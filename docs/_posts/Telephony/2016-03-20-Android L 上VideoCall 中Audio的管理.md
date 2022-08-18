@@ -78,7 +78,7 @@ title: 'Audio in Video Call(Android_L)'
 稍微注意一下我们就会发现，在最初的版本中，**updateAudioMode()传进来是ture的话，有可能会打开Speaker，但是传入false的话就一定不会打开Speaker**，记住这一点，后面实现一些需求的时候需要注意这点。
 然后，updateAudioMode()只在三处被调用，（AS截图：）
 
-![](./_image/audio_updateAudioMode.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_updateAudioMode.jpg)
 图1: updateAudioMode()被调用
 并且只在enterVideoMode()的时候才传入true，至此我们知道：**只有在进入视频模式的时候才有可能打开Speaker。**
 
@@ -89,7 +89,7 @@ title: 'Audio in Video Call(Android_L)'
  
 因为这个步骤会让call进入视频模式，执行enterVideoMode()方法，同时更新会执行updateAudioMode()方法更新audioMode，同样由视频电话降级为语音电话会退出视频模式执行exitVideoMode()，逻辑如下图：
 
-![](./_image/audio_VO_to_VT.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_VO_to_VT.png)
 图2: VoiceCall和VideoCall互相切换
 
 从上图可以看到，每次进入视频模式的时候都会去updateAudioMode()的，我们希望的当然是它能走到`telecomAdapter.setAudioRoute(AudioState.ROUTE_SPEAKER);`这一步，执行到的话万事大吉，但是从代码中也可以看到，前面有一层层的判断条件，而假如不用顾及那么多的话，完全可以重写方法实现进入视频打开Speaker的功能。
@@ -105,19 +105,19 @@ title: 'Audio in Video Call(Android_L)'
  
 于是这一部分的逻辑流程大致如下图，下面蓝色大框里面是需要增加的代码。
 
-![](./_image/audio_videoCall%20audio_expend.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_videoCall%20audio_expend.png)
 图3: VT to VO close Speaker
 
 ###用户在hold当前视频通话之后在取消hold之后应还原之前的audioMode状态
 
 这个操作执行示意图：
 
-![](./_image/audio_hold_unhold.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_hold_unhold.png)
 图4: hold/unhold
 点击CallButton上的hold按钮会把call至于HOLD状态，之后call会退出视频模式（这里说明一下，其实是call先进入HOLD/ACTIVE状态，然后才exitVideoMode()/enterVideoMode()），把视频窗口都关掉，因为做了上面图3那种修改，在exitVideoMode中加了代码关闭Speaker，所以hold这一步操作也会关掉Speaker。并且在取消hold重新进入视频模式的时候会再次打开Speaker。这里看似符合期望现象，但是如果我们在hold之前Speaker不是开着的呢？实际上这已经造成了一种新的不和常理的现象：不管之前是audioMode是什么，只要是从HOLD的状态中回到ACTIVE，Speaker都会打开。
 那么如何修改呢？我们可以采取“保存-恢复”的方法，即hold的时候保存一下当前的audioMode，在unhold的时候取出保存的audioMode并setAudioRoute重新设置一下。
 
-![](./_image/audio_VT_HOLD_details.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_VT_HOLD_details.png)
 图5: HOLD<->ACTIVE转换
 保存audioMode的地方可以自己选，数据不会丢应该就可以。可以保存在Call里面，这样只要call存在，状态就不会丢。
 
@@ -128,7 +128,7 @@ title: 'Audio in Video Call(Android_L)'
 原因：
 从现有代码中可以看到如下调用流程，可以看到在来电的时候会进入视频模式enterVideoMode(），从前面的分析我们知道enterVideoMode()会调用updateAudioMode(true)，于是Speaker被打开。
 
-![](./_image/audio_enterVideoMode.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_enterVideoMode.jpg)
 图6: 来电更新AudioMode
 
 解法：

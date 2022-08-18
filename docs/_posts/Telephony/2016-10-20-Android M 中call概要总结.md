@@ -56,7 +56,7 @@ packages/**services**/Telephony
 
 这只是框架上的一个大致结构
 
-![](./_image/call_telephony_struc.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_telephony_struc.png)
 
 在实际的流程中并不一定是自上而下或者自下而上的，也有可能跳过某个模块直接传递信息。
 比如在Dialer拨号的时候，就是直接调用framework/base/telecmm中TelecomManager的placeCall接口拨打电话。
@@ -89,7 +89,7 @@ DialpadPresenter
 ConferenceManagerFragment
 ConferenceMangerPresenter
 没遇到过这里的问题，只是准备PPT的时候才看到这个。
-![](./_image/call_ConferenceManagerFragment.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_ConferenceManagerFragment.png)
 InCallActivity启动的时候，在显示完动画后，调用showCallCardFragment()显示CallCardFragment（CallCardFragment本身也有动画）然后Fragment内new Presenter。
 其他几个也有各自的显示流程，不一定是在InCallActivity的动画显示后立刻show出来。
 另：**VideoCallFragment不是**通过showFragment()显示的。
@@ -97,20 +97,20 @@ InCallActivity启动的时候，在显示完动画后，调用showCallCardFragme
 ## 2.2 通话界面布局分析 
 
 注：界面被轻量定制，并非和原生完全一样。
-![](./_image/call_InCallUI.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_InCallUI.png)
 图1 CallCardFragment和CallButtonFragment
 
 图中除了priamry_card_info.xml和call_button_fragment.xml是布局文件，其他标注均为控件id。
 AnswerFragment和DialpadFragment共用一个FramLayout
 @+id/answer_and_dialpad_container
 在显示的时候覆盖在CallCard的上层，比如CallCard中的photo（联系人头像）就是被dialpad给覆盖。
-![](./_image/call_VideoCall.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_VideoCall.png)
 图2 VideoCallFragment（真人出境啦）
 
 左侧为普通视频电话，右侧为视频会议电话。
 **注意**，虽然右侧看起来像是有4个小窗口显示内容，但实际上和左边一样只有两个控件显示视频，只不过右侧上方的**视频内容**被分成了3块。我们把黑色的背景色调成蓝色，就容易区分出是两个控件了。
 至于为什么两张图incomingVideo的位置不一样，CallCard一个显示一个没显示，是因为，点击屏幕（或者等5s）后CallCard会隐藏，然后incomingVideo会自动调整位置到中央。
-![](./_image/call_answer.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_answer.png)
 图3 AnswerFragment
 
 更多的界面就不一一详细说明了。
@@ -126,7 +126,7 @@ AnswerFragment和DialpadFragment共用一个FramLayout
 **InCallActivity**
 InCallActivity是InCallUI的主体，可以说所有的类都是围绕着或者是为了这个Activity工作的，各个Fragment附着在InCallActivity上，InCallPresenter通过InCallActivity提供的get***Fragmment的方法，获得具体Fragment对象， 更新界面。
 Fragment是通过InCallActivity创建和显示的，但是各个Presenter和InCallPresenter之间的交互**不一定全都经过InCallActivity**（比如可以通过listener调用）
-![](./_image/call_InCallUI_struc.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_InCallUI_struc.png)
 图4 InCallUI基本架构
 
 我们举两个例子 来说明界面上更新走过的流程：
@@ -145,11 +145,11 @@ Fragment是通过InCallActivity创建和显示的，但是各个Presenter和InCa
 比较重要的是InCallUI里的**Call.State**和InCallPresenter的内部类**InCallState**
 InCallPresenter控制着界面显示，这里的InCallState就是界面显示的依据。
 TelephonyManager向外提供访问手机状态的接口，只有三种状态。
-![](./_image/call_Call_State.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_Call_State.png)
 图 5 Call的状态
 
 下图表现的是InCallUI Call状态的转化以及对应的TelephonyManager.CALL_STATE_***状态
-![](./_image/call_call_state_change.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_call_state_change.jpg)
  图6 InCallUI 中的Call状态转化
 
 其中CONNECTING/SELECT_PHONE_ACCOUNT这两个是**二者取其一**。如果是双卡手机并设置每次询问，则拨号后的状态为SELECT_PHONE_ACCOUNT，如果有是单卡或者默认某一张卡拨打，则状态为CONNECTING，并且这个状态很短暂，很快就转换为DIALING。
@@ -171,7 +171,7 @@ D/ImsSenderRxr( 4499): [UNSL]< UNSOL_RESPONSE_CALL_STATE_CHANGED [id=1,DIALING,t
 getPhone().registerForPreciseCallStateChanged(mHandler, MSG_PRECISE_CALL_STATE_CHANGED, null);当收到这个消息的时候会调用updateState()更新状态。
 updateState
 在Telephony更新call的状态的时候不同的状态对应不同的方法，如setActiveInternal()
-![](./_image/call_ims_call_state_update.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/call_ims_call_state_update.png)
   图7 ims call state update（简图）
 
 上图也印证了之前说的，虽然层次上packages叠在framework上面，但实际上他们并不是严格按照相邻的顺序去调用。有可能隔着一层就调用了，也可能反复调用。

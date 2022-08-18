@@ -13,17 +13,17 @@ Android O 点击QSPanel 中的数据图标没法展开详情查看数据使用�
 1. QSPanel 半展开是点击icon 即开关，执行的方法为handleSecondaryClick();
 2. QSPanel 全展开时，点击icon 有些tile 有detai展示，比如下图中的wifi tile，此时执行的方法是handleClick()，之后调用showDetail() 方法显示详细信息;
 
-![](./_image/android_N_turn_on_wifi_2.gif)
-![](./_image/android_N_turn_on_wifi_expanded.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_N_turn_on_wifi_2.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_N_turn_on_wifi_expanded.gif)
 
 但是到了Android O 上变的有点不一样了：
 1. 半展开时点击icon 和Android N 上效果一样，但执行的方法是handleClick()；
 2. 全展开时有两种情况，点击**icon**还是开关，此时执行的方法也是handleClick()；
 3. 全展开时点击**label** 会展示detail（如果有的话），有detail 的tile 在label 旁边会有一个**indicator**，而且注意观察的话，会发现点击icon 和点击label 水波纹的中心会不一样（如果没有detail 的话，点击label 也是上一种效果）。此时执行的方法是handleSecondaryClick()
 
-![](./_image/android_O_turn_on_wifi.gif)
-![](./_image/android_O_turn_on_wifi_expanded.gif)
-![](./_image/android_O_turn_on_wifi_expanded_detail.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_turn_on_wifi.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_turn_on_wifi_expanded.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_turn_on_wifi_expanded_detail.gif)
 
 那么Android O 上是怎么会有icon 和label 两种点击事件的呢？
 
@@ -85,13 +85,13 @@ Android O 点击QSPanel 中的数据图标没法展开详情查看数据使用�
 ```
 可以看到indicator 的显示受state.dualTarget 的控制。
 考虑到另外也有几个可以展开detail 的tile，比如Bluetooth等，我猜想state.dualTarget 一定会在那几个tile 里面赋值为true。我们搜一下，果然：
-![](./_image/android_O_dualTarget_tiles.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_dualTarget_tiles.png)
 那我们在CellularTile 对应的位置也给dualTarget 赋值为true 应该就能达到我们最初想要的效果了。
 
 # 结论和效果
 添加`state.dualTarget = true;` 到CellularTile.java 的handleUpdateState() 方法后，效果如下：
 
-![](./_image/android_O_mobile_data_tile_click.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_mobile_data_tile_click.gif)
 
 **state.dualTarget 控制了是否显示indicator 以及label 是否可以点击**，但点击有没有反应要看有没有实现相应的方法了。
 点击mobile date 这里并不是凭空多出来一个功能哈，是我知道有这个功能，只是没显示出来。

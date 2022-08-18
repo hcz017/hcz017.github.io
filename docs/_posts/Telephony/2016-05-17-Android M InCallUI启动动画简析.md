@@ -188,7 +188,7 @@ getShrinkAnimator()动画生成
 好了现在我们回头看看文章开头的两个问题是否得到了解答。
 前面的流程基本上就是动画生成,设置属性,显示动画的流程，
 非要话个图的话大概就是下面这样
-![](./_image/InCallUI_animation.jpg)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/InCallUI_animation.jpg)
 如果我们把Android M上的动画代码跟Android L上的代码做对比的话会发现，Android L也有这两个类型的动画，都在CallCardFragment.java里，通过`mAnimatorSet.playSequentially(revealAnimator, shrinkAnimator);`顺序播放两个动画。
 
 第二个问题的答案貌似还不明显，为什么有些手机的动画不一样？
@@ -203,10 +203,10 @@ valueAnimator.setDuration(getResources().getInteger(R.integer.reveal_animation_d
 mShrinkAnimationDuration = getResources().getInteger(R.integer.shrink_animation_duration);
 ```
 那么这两个值的来源呢?
-![](./_image/InCallUI_animation_values.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/InCallUI_animation_values.png)
 从上图中可以看到，这个动画时长默认是333ms的，但是在有些配置文件里面是1，而且都改成了1！！从他们所在的文件夹可以看到，这个配置是针对中国移动sim卡的修改（mcc mnc 匹配到中国移动），难道是针对中国移动定制机的修改？苦了我刷CM系统的人们（AOSP没这个配置）。
 是哪个家伙做了这样的修改（黑线脸）？！
-![](./_image/InCallUI_animation_values_modify.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/InCallUI_animation_values_modify.png)
 
 提交者就不贴出来了，他针对中国移动新增了这4个文件配置动画时长。。
 **题外：**

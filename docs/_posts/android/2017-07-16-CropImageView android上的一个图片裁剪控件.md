@@ -17,7 +17,7 @@ CropImageView的原型来自[**Cropimage_demo**](https://github.com/gumingwei/Cr
 ## 效果展示
 gif效果展示：
 
-![](./_image/cropimage.gif)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/cropimage.gif)
 
 ## 特点
 
