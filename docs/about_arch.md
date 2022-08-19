@@ -3,7 +3,6 @@ date: 2017-02-10 14:19
 status: public
 title: About
 layout: page
-permalink: /about/
 ---
 
 ## 以前

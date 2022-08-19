@@ -21,7 +21,7 @@
 title: Code make life simple
 email: hcz10@163.com
 description: >- # this means to ignore newlines until "baseurl:"
-  博文图片暂时还没整理。GitHub 仓库里有图。
+  本站主要作用是归档。
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: 
