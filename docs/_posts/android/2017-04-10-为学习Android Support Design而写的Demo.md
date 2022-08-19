@@ -1,5 +1,5 @@
 ---
-title：为学习Android Support Design而写的Demo
+title:  为学习Android Support Design而写的Demo
 date:  2017-04-10 15:20
 tags: SupportDesign
 ---
