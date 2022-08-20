@@ -1,6 +1,6 @@
 ---
 date:  2020-04-27 12:08
-title:  'android r preview 3 编译问题修复'
+title:  'android R preview 3 编译问题修复'
 ---
 
 
@@ -20,7 +20,7 @@ error: external/linux-kselftest/Android.bp:56:15: unrecognized property "arch.mi
 
 截图
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200427120230609.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-1-error.png)
 
 如果你单纯的去这两支文件里屏蔽掉相关代码段还会报其他错误。
 
@@ -28,34 +28,35 @@ error: external/linux-kselftest/Android.bp:56:15: unrecognized property "arch.mi
 期间看到这问朋友的博客：[Android R preview编译失败](https://blog.csdn.net/u013398960/article/details/105216011)，看到 build/soong/android 目录下可能有点东西。  
 那我们去build 目录下找找线索，有个叫Elliott 的老哥貌似有在做相关修改。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200427120457156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-Elliott-commit.png)
 
 我们去aosp gerrit 上搜他。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020042712052666.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-Elliott-gerrit.png)
 
 这老哥好像最近专门在搞这个，可以看到已经在master 分支上做了修改。那么我们本地preview 3 的分支是什么情况呢？
 
 查看git log，本地preview 3 分支上这两个目录的上次提交还是在一年前，遂**checkout master 分支，把对应的修改拉下来**。  
 （上图和下图的时间对不上，那是因为commit 的时间和push 的时间不一样，change id 是一样的）
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200427120549457.png)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-branch.png)
 
 build....
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200427120615981.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-build-1.png)
 
 ---
 
 更新编译进度
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200427162719680.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-jni-error.png)
 
 fixing...
 
 把这个提交cherry-pick 下来
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200427190210668.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-fix-jni.png)
 
 building...
 
@@ -63,22 +64,21 @@ building...
 
 更新编译进度
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200428172314337.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-build-2.png)
 
 **这里是返回一个布尔值，暴力点的话可以直接强制return true 解决。**
 
 正规方法的话，上aosp 上扒提交，简单说就是两个timezone 的更换与更新。但是提交不止这两个。所以我强制改返回值了。
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020042817240142.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-build-2-fix.png)
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200428172406343.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
-
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-build-2-fix2.png)
 building...
 
 ---
 **成了！**
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200428172420419.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FhYTExMQ==,size_16,color_FFFFFF,t_70)
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/and-r-cpl-success.png)
 
 # 解法总结
 1. external/linux-kselftest 仓库切换到master 分支，如果master 太新有其他问题就只cherry-pick mips 那条提交；

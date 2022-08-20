@@ -1,8 +1,8 @@
 ---
-date: 2015-11-25 09:18
+date: 2015-11-02 09:18
 status: public
 tags: Call
-title: 'SIM卡询问是如何开启的？(android 5.0)'
+title: '双卡拨号SIM卡询问是如何开启的？(android 5.0)'
 ---
 
 本篇解决两个问题
