@@ -54,11 +54,11 @@ vendor 分区也不能push 文件。
 暂时没有找到往模拟器vendor 和system 分区push 文件的可行方法。
 
 **参考连接**
-https://android.stackexchange.com/questions/171442/root-android-virtual-device-with-android-7-1-1
-https://android.stackexchange.com/questions/110927/how-to-mount-system-rewritable-or-read-only-rw-ro/207200#207200
-https://developer.android.com/studio/run/emulator-commandline#deprecated
-https://stackoverflow.com/questions/5095234/how-to-get-root-access-on-android-emulator
-
-https://www.jianshu.com/p/fd39ec466e88
-https://developer.android.google.cn/studio/run/emulator-comparison?hl=zh-cn
-https://developer.android.google.cn/studio/run/emulator?hl=zh-cn#screen-recording
+1. https://android.stackexchange.com/questions/171442/root-android-virtual-device-with-android-7-1-1
+2. https://android.stackexchange.com/questions/110927/how-to-mount-system-rewritable-or-read-only-rw-ro/207200#207200
+3. https://developer.android.com/studio/run/emulator-commandline#deprecated
+4. https://stackoverflow.com/questions/5095234
+5. how-to-get-root-access-on-android-emulator
+1. https://www.jianshu.com/p/fd39ec466e88
+1. https://developer.android.google.cn/studio/run/emulator-comparison?hl=zh-cn
+1. https://developer.android.google.cn/studio/run/emulator?hl=zh-cn#screen-recording

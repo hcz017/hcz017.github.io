@@ -106,7 +106,7 @@ systemctl start smb nmb
 
 或者你可以参考这个人的配置[Samba in KDE, how to share from Linux to Windows](https://forum.manjaro.org/t/samba-in-kde-how-to-share-from-linux-to-windows/40941/52)
 
-# 参考
+# 参考链接
 
-- [Using Samba in your File Manager](https://wiki.manjaro.org/index.php?title=Using_Samba_in_your_File_Manager#KDE)
-- [smb.conf — The configuration file for the Samba suite](https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html)
+1. [Using Samba in your File Manager](https://wiki.manjaro.org/index.php?title=Using_Samba_in_your_File_Manager#KDE)
+2. [smb.conf — The configuration file for the Samba suite](https://www.samba.org/samba/docs/current/man-html/smb.conf.5.html)

@@ -69,8 +69,6 @@ drawFrame(mSurfaceTexture, holder.width, holder.height,
 
 ## 参考链接
 
-[android.hardware.camera2](https://developer.android.com/reference/android/hardware/camera2/package-summary)
-
-[CameraCaptureSession](https://developer.android.com/reference/android/hardware/camera2/CameraCaptureSession)
-
-[CameraDevice](https://developer.android.com/reference/android/hardware/camera2/CameraDevice)
+1. [android.hardware.camera2](https://developer.android.com/reference/android/hardware/camera2/package-summary)
+2. [CameraCaptureSession](https://developer.android.com/reference/android/hardware/camera2/CameraCaptureSession)
+3. [CameraDevice](https://developer.android.com/reference/android/hardware/camera2/CameraDevice)

@@ -14,6 +14,7 @@ Android O 点击QSPanel 中的数据图标没法展开详情查看数据使用�
 2. QSPanel 全展开时，点击icon 有些tile 有detai展示，比如下图中的wifi tile，此时执行的方法是handleClick()，之后调用showDetail() 方法显示详细信息;
 
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_N_turn_on_wifi_2.gif)
+
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_N_turn_on_wifi_expanded.gif)
 
 但是到了Android O 上变的有点不一样了：
@@ -22,7 +23,9 @@ Android O 点击QSPanel 中的数据图标没法展开详情查看数据使用�
 3. 全展开时点击**label** 会展示detail（如果有的话），有detail 的tile 在label 旁边会有一个**indicator**，而且注意观察的话，会发现点击icon 和点击label 水波纹的中心会不一样（如果没有detail 的话，点击label 也是上一种效果）。此时执行的方法是handleSecondaryClick()
 
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_turn_on_wifi.gif)
+
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_turn_on_wifi_expanded.gif)
+
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_turn_on_wifi_expanded_detail.gif)
 
 那么Android O 上是怎么会有icon 和label 两种点击事件的呢？
@@ -85,7 +88,9 @@ Android O 点击QSPanel 中的数据图标没法展开详情查看数据使用�
 ```
 可以看到indicator 的显示受state.dualTarget 的控制。
 考虑到另外也有几个可以展开detail 的tile，比如Bluetooth等，我猜想state.dualTarget 一定会在那几个tile 里面赋值为true。我们搜一下，果然：
+
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/android_O_dualTarget_tiles.png)
+
 那我们在CellularTile 对应的位置也给dualTarget 赋值为true 应该就能达到我们最初想要的效果了。
 
 # 结论和效果
