@@ -6,6 +6,8 @@ title: 'pyqtgraph scatter 散点图上点的样式'
 
 # 记录散点图上点的绘制样式
 
+简略总结，symbol 表示形状，pen 画的是边框颜色（鼠标放上去会消失），brush 填充内部颜色。
+
 官方文档[ScatterPlotItem — pyqtgraph 0.12.4.dev0 documentation](https://pyqtgraph.readthedocs.io/en/latest/graphicsItems/scatterplotitem.html) 中对相关参数的一些说明：
 
 | *symbol* | can be one (or a list) of symbols. For a list of supported symbols, see [`setSymbol()`](https://pyqtgraph.readthedocs.io/en/latest/graphicsItems/scatterplotitem.html#pyqtgraph.ScatterPlotItem.setSymbol "pyqtgraph.ScatterPlotItem.setSymbol"). QPainterPath is also supported to specify custom symbol shapes. To properly obey the position and size, custom symbols should be centered at (0,0) and width and height of 1.0. Note that it is also possible to ‘install’ custom shapes by setting ScatterPlotItem.Symbols[key] = shape. |
