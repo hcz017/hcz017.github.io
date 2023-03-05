@@ -2,6 +2,7 @@
 date: 2016-05-17 17:15
 status: public
 tags: Call
+title: 'Android M InCallUI 启动动画简析'
 ---
 本篇回答下面几个问题：
 1. 显示动画的流程是怎样的？
