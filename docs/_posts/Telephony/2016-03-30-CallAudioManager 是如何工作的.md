@@ -6,12 +6,12 @@ title: ' CallAudioManager 是如何工作的'
 ---
 
 CallAudioManager是干啥的呢？单词分来来写 Call Audio Manager，一个管理通话中音频状态的类。
-#初始化
+# 初始化
 一张图看清CallAudioManager怎么来的 。
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/CallAudioManager.jpg)
 
 在TeleService创建的时候对TelecomGlobals进行初始化，然后new出一个CallsManager，在CallsManager.java的构造函数中new出一个CallAudioManager()，带三个参数CallAudioManager(context, statusBarNotifier, mWiredHeadsetManager)。
-#文件结构
+# 文件结构
 然后看一下CallAudioManager的继承和实现关系
 `CallAudioManager extends CallsManagerListenerBase
         implements WiredHeadsetManager.Listener {`
@@ -92,7 +92,7 @@ CallAudioManager.java继承CallsManagerListenerBase.java（其实就是CallsMana
 前面所有执行的步骤到最后几乎都是为了执行到这个方法里，去打开/关闭Speaker，“打开/关闭”蓝牙，然后把状态的变化通知出去。这里并没有单独写一个方法通知状态的变化，只是在这个方法内调用了`CallsManager.getInstance().onAudioStateChanged(oldAudioState, mAudioState);`。
 值得注意的是turnOnSpeaker(true)是通过mAudioManager.setSpeakerphoneOn(on);的方式，而turnOnBluetooth(true);则是通过mBluetoothManager.connectBluetoothAudio();的方式，蓝牙不归AudioManager管？想想也对，有可能是连接的蓝牙键盘呢。
 另外有一点，切换到听筒和有线耳机的方法居然后把扬声器和蓝牙都关掉。
-#CallAudio更新
+# CallAudio更新
 起先我是想写“audio更新”的，但是为什么改成“CallAudio更新”呢？因为这个audio跟call的关系太密切了，可以说call不存在audio就不存在，而且Android M上很多跟call有关的audio相关的类，都由Audio更名为CallAudio了（如AudioState.java -> CallAudioState.java）。
 前面说到这个类里面最重要的方法是setSystemAudioState()，那么看一下调用层级：
 
@@ -104,7 +104,7 @@ CallAudioManager.java继承CallsManagerListenerBase.java（其实就是CallsMana
 左侧的圆角长方形表示“设置为默认的audio state”调用这个方法的时候，不用携带audio相关的参数，方法内会自己生成一个初始化的audioState。两个椭圆代表的场景是“所有通话被移除，恢复默认值”，和“满足‘从不是VoiceCall到VoiceCall’的时候设置一个初始化的audioState”。
 右侧圆角长方形表示“设置audio state”，调用这个方法带4个参数，分别是：强制设置，是否mute，audioState，当前所有支持的audioState。
 最右侧6个椭圆中只有最下面的setAudioRoute(）是手动设置，我们在InCallUI界面上操作都是从这个入口传进来的。其余可以认为是自动设置。
-#AudioState
+# AudioState
 下面我们再说一下最关键的一个变量mAudioState。
 mAudioState这个变量几乎携带了所有的audio相关的信息，关键的两个：
 ```java

@@ -13,7 +13,7 @@ Android Design Support Library 中推出了一系列方便开发者实现Materia
 - [看，这个工具栏能伸缩折叠——Android CollapsingToolbarLayout使用介绍](http://www.jianshu.com/p/06c0ae8d9a96)
 - [Material Design之CollapsingToolbarLayout使用](http://blog.csdn.net/u010687392/article/details/46906657])
 
-#正文
+# 正文
 CollapsingToolbarLayout有一个属性可以设置在折叠状态时状态栏的颜色：
 app:contentScrim="?attr/colorPrimary"//一般会写成透明或者半透明
 但是我发现，在写了这一行代码后没有生效，即颜色还是默认的颜色。

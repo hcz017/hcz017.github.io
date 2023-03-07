@@ -4,7 +4,7 @@ status: public
 title: Notification中Extra携带的参数不更新
 ---
 
-#问题：
+# 问题：
 创建一个notification在状态栏显示，这个notification在创建之时放了一个intExtra进去，每次创建的时候这个值会有变化，但是在点击notification后getExtra得出来的值却没有更新。
 简单说就是Extra没有更新，百思不得解。
 后来发现一个参数`PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, intent, 0);`，这里面的0是表示什么意思？

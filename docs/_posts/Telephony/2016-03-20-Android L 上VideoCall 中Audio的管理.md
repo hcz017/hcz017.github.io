@@ -33,7 +33,7 @@ title: 'Audio in Video Call(Android_L)'
             ROUTE_SPEAKER;
 
 ```
-##What we got?
+## What we got?
 
  首先说明一点，在我们起初拿到的代码中，在整个VideoCallPresenter中只有一个方法中设置了setAudioRoute，并且这个方法中只有一处明确设置了打开打开Speaker，代码段:
  
@@ -82,10 +82,10 @@ title: 'Audio in Video Call(Android_L)'
 图1: updateAudioMode()被调用
 并且只在enterVideoMode()的时候才传入true，至此我们知道：**只有在进入视频模式的时候才有可能打开Speaker。**
 
-##What we want？
+## What we want？
 接下来说一下videoCall中不同操作的期望现象，这里我们不以现有代码中已经实现的功能推导现象（代码不够完善），而是以一种用户的角度去看待我做了某个动作以后希望得到什么现象。
 
-###从语音电话升级到视频电话Speaker要打开
+### 从语音电话升级到视频电话Speaker要打开
  
 因为这个步骤会让call进入视频模式，执行enterVideoMode()方法，同时更新会执行updateAudioMode()方法更新audioMode，同样由视频电话降级为语音电话会退出视频模式执行exitVideoMode()，逻辑如下图：
 
@@ -95,7 +95,7 @@ title: 'Audio in Video Call(Android_L)'
 从上图可以看到，每次进入视频模式的时候都会去updateAudioMode()的，我们希望的当然是它能走到`telecomAdapter.setAudioRoute(AudioState.ROUTE_SPEAKER);`这一步，执行到的话万事大吉，但是从代码中也可以看到，前面有一层层的判断条件，而假如不用顾及那么多的话，完全可以重写方法实现进入视频打开Speaker的功能。
 而实际上上面那段代码的执行结果：**首次从语音升级到视频的时候Speaker是可以打开的，但如果降级在升级到视频就不会打开了**，为啥呢？isPrevAudioModeValid，这个变量产生了影响，非首次进入视频模式的情境下，这个变量有值了，导致代码不能执行到if里面对audioRoute的设置。但是轻易的去掉这个判断条件会引起其他问题（旋转屏幕会对Speaker产生影响）， 为了实现每次进入视频模式都打开Speaker，我在本地发起升级视频请求并成功升级和接受对方发来的升级到视频的请求中增加代码打开了Speaker。
  
-###视频电话通话降级为语音通话后要把开启着的Speaker关掉
+### 视频电话通话降级为语音通话后要把开启着的Speaker关掉
 
 从图1和图2中我们可以看到只有从语音到视频的时候才会更新audio，反过来切换是不会更改audioRoute的，也就是说audio不会产生任何变化。
  
@@ -108,7 +108,7 @@ title: 'Audio in Video Call(Android_L)'
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/audio_videoCall%20audio_expend.png)
 图3: VT to VO close Speaker
 
-###用户在hold当前视频通话之后在取消hold之后应还原之前的audioMode状态
+### 用户在hold当前视频通话之后在取消hold之后应还原之前的audioMode状态
 
 这个操作执行示意图：
 
@@ -121,7 +121,7 @@ title: 'Audio in Video Call(Android_L)'
 图5: HOLD<->ACTIVE转换
 保存audioMode的地方可以自己选，数据不会丢应该就可以。可以保存在Call里面，这样只要call存在，状态就不会丢。
 
-###通话中收到新的视频来电不应该把Speaker打开
+### 通话中收到新的视频来电不应该把Speaker打开
 
 现象：
 在通话中收到另一个视频电话来电，原本非开启状态的Speaker会切换为开启。

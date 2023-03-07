@@ -17,8 +17,8 @@ title: 'InCallUI 中CallButton 界面更新介绍（audioButton等）'
 
 然后overflow的选项的位置，如果只有一项的时候overflow会被替换为“添加通话”按钮，在多于一个以后显示overflowbutton，更多信息我们下面说。
 
-#audioButton
-##显示效果
+# audioButton
+## 显示效果
 连接蓝牙耳机
 
 会有三个选项 “扬声器”、“手机听筒”、“蓝牙“（当前图标为选择了蓝牙）
@@ -35,7 +35,7 @@ title: 'InCallUI 中CallButton 界面更新介绍（audioButton等）'
 
 ![callButton_audio_wl](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/callButton_audio_wl.png?imageView2/2/w/600)
 
-##负责显示的代码
+## 负责显示的代码
 看完了显示效果下面我们来说一下界面更新的相关的代码。CallButtonFragment.java中有三个比较重要的方法用来显示和更新显示audioButton和audioMode popMenu，它们分别是updateAudioButtons()，showAudioModePopup()和refreshAudioModePopup()。
 
 1. updateAudioButtons()  选择一个图标显示在audioButton的位置。这里涉及到一个audioRoute优先级的问题，在连接了蓝牙耳机后会优先通过蓝牙耳机播放声音，也就表示这时候会显示蓝牙耳机的图标
@@ -259,12 +259,12 @@ setAudioRoute 以及更新的流程图：
 
 注意telecomm层的Phond，因为audio route是不区分call的所以这里是通过phone操作的，而后面的hold则要区分call，所以中间的方法会带callId作为参数。
 
-#muteButton
+# muteButton
 mute实际上也是对audio的设置，流程参考上面audio更改的流程图。在setSystemAudioState(boolean force, boolean isMuted, int route, int supportedRouteMask)中可以看到，第二个参数就是表示的mute，在AudioManager中的onAudioModeChange()中也用onMute向上更新了mute的状态。
 
-#dialpadButton
+# dialpadButton
 这个比较简单，没有很复杂的逻辑，在InCallActivity中showDialpad()来显示或隐藏拨号盘。随着dialpadButton更新的还有endCallButton(CallCardFragment中的)。endCallButton 在代码中并不叫endcallButton，而是叫mFloatingActionButton，放在mFloatingActionButtonController里，放在mFloatingActionButtonController里的大小有两个值mFabNormalDiameter 和 mFabSmallDiameter，根据dialpad是否显示来选择用不同的值显示endCallButton。（PS：注意旋转屏幕切换系统语言等产生资源销毁重建时对dialpad显示的影响。）
-#holdButton
+# holdButton
 
 设置hold
 到达RIL.java后我们不继续深追了，这里要说名的一点是17步并不是紧接着16步之后的，而是向上更新的开始。那么什么时候开始向上更新的呢？我们知道hold call这个动作一定是在已经成功建立起一个call的基础上的，而call的连接在建立的时候会通过[RegistrantList消息处理机制](http://blog.csdn.net/aaa111/article/details/43833757)注册一个消息MSG_PRECISE_CALL_STATE_CHANGED，而在hold call成功后会TelephonyConnection会收到并进一步处理这个消息，在hold call的这个场景中便是向上更新hold的state。
@@ -277,7 +277,7 @@ hold成功向上更新
 
 上面是设置成功的时序图，如果因为网络原因或者modem出错的话，hold是可能不成功的，这时候可能会看到两种现象，一个是holdButton显示checked后立刻回复unChecked，还一个是提示“Unable to switch call”
 
-#overfloewButton
+# overfloewButton
 显示条件：Buttons数量大于5（CDMA大于4）的时候显示，我没有CDMA手机，不知道是少了哪一个button，
 ```java
 	int maxButtonCount = (TelephonyManager.PHONE_TYPE_CDMA != phoneType) ?

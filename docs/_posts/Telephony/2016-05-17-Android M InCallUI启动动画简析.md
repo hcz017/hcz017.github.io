@@ -11,7 +11,7 @@ title: 'Android M InCallUI 启动动画简析'
 写这一篇主要用两个原因，1.发现Android M上新增了一个类CircularRevealFragment.java，那么新的东西就像看看它是干什么的；2.我手机上没有打电话的动画！！
 
 代码中两处动画，一处是InCallActivity显示动画，就是那个由一个点展开的动画，另一个是CallCard的动画，就是由下方升到上方的动画。
-#InCallActivity启动动画
+# InCallActivity启动动画
 在InCallActivity.java的internalResolveIntent()方法内（这个方法接收处理intent，必走），跳至 CircularRevealFragment.java
 touchPoint即动画展开的那个点。可以看到这个touchPoint有两个取值的地方，这个有点类似于双保险，TouchPointManager中getPoint()取出来的值是点击的时候就保存到TouchPointManager中的，而`(Point) extras.getParcelable(TouchPointManager.TOUCH_POINT);`是在构造拨号的intent的时候存进去的
 ```java
@@ -120,7 +120,7 @@ CircularRevealFragment.java新增类
     }
 ```
 好的InCallActivity的动画显示完以后，下面接着CallCardFragment的动画。
-#CallCard动画
+# CallCard动画
 在动画执行完InCallActivity的启动动画以后，通过mListener.onCircularRevealComplete(getFragmentManager());调用CallCardFragement.java中的 animateForNewOutgoingCall()
 InCallPresenter.java
 ```java

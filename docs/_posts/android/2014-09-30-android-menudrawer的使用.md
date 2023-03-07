@@ -8,7 +8,7 @@ title: android-menudrawer的使用
 
 GitHub上发现一个挺不错的menudrawer，记录一下使用过程。
 
-###MenuDrawer侧边菜单
+### MenuDrawer侧边菜单
 - - -
 
 地址为：[https://github.com/gokhanakkurt/android-menudrawe](https://github.com/gokhanakkurt/android-menudrawer) 包含独立的library和sampleDemo。
@@ -33,7 +33,7 @@ GitHub上发现一个挺不错的menudrawer，记录一下使用过程。
 ![Image Title](http://ww4.sinaimg.cn/mw690/69443115jw1el77u5cu1mj20u01e0gpk.jpg)
 
 
-###不同item下对应内容
+### 不同item下对应内容
 
 作者提供的Demo点击不同的Item并不会像是不同的内容（只是更改了一个TextView显示的文字）。
 

@@ -10,7 +10,7 @@ title: 'Android 中 RegistrantList消息处理机制 以android 5.0 MT为例'
 RegistrantList 作为通知者支持对Registrant 的**增加**（add/addUnique）**删除**（remove），并且能够发出**通知**（notifyRegitrants），而Registrant作为观察者，**响应**通知者发出的通知，调用internalNotifyRegistrant()把add()时携带的Message发出去处理。
 总体思想是：一个对象中开辟一个空间用于存放Message，当调用regist方法时将Message存放进去，当调用notify方法时将所有Message取出并发送到MessageQueue中等待处理。
 下面我们以android 5.0上 来电流程为例讲一下RegistrantList机制的使用。
-#注册为观察者
+# 注册为观察者
 1.PstnIncomingCallNotifier这个类中调用mphoneBase中的registerForNewRingingConnection方法注册为观察者，android中的注册为观察者的方法通常写为**registerFor\*\*\*()**形式，即为某事件注册消息通知。
 PstnIncomingCallNotifier.java
 ```java
@@ -86,7 +86,7 @@ RefistrantList.java
 registerForNewRingingConnection()方法完成了往RegistrantList中添加Registrant的操作。
 同时我们也看到，**RegistrantList管理了一个Registrants列表，Registrants保存了多个Registrant**。
 
-#发出通知
+# 发出通知
 1.handlePollCalls方法根据RIL发出的Call List对象判断Call的状态，并发出不同的通知，
 有新的来电将执行： phone.notifyNewRingingConnection; 形如**notify\*\*\*()**也是惯用写法。
 GsmCallTracker.java
@@ -143,7 +143,7 @@ GsmCallTracker.java
     }
 ```
 
-#响应通知消息
+# 响应通知消息
 Registrant.java
 这里是处理RegistrantList 的通知，主要是将message发出出去。
 这里的handler和message是之前调用RegistrantList 的addUnique() 方法时添加进去的（add(new Registrant(h, what, obj));）。

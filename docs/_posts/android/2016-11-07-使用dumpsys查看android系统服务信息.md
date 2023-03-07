@@ -30,10 +30,10 @@ dumpsys这个工具可以查看当前设备系统服务信息。
 常用命令举例：
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_16-28-52.jpg)
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_16-28-58.jpg)
-￼
+
 
 不同服务可以跟不同的命令选项，以activity为例：
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_activety.jpg)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_activety.jpg)
 
 ## 获取Activity信息：
 `adb shell dumpsys activity`
@@ -46,7 +46,7 @@ dumpsys这个工具可以查看当前设备系统服务信息。
 （findstr不可用的话用grep）
 最近activity：
 
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_16-29-53.jpg)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_16-29-53.jpg)
 
 ## 获取电源管理信息：
  `adb shell dumpsys power`
@@ -57,7 +57,7 @@ dumpsys这个工具可以查看当前设备系统服务信息。
 屏幕分辨率：mDisplayWidth=1440，mDisplayHeight=2560  
 **wake lock**：Wake Locks:size =  
 
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_16-30-37.jpg)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_16-30-37.jpg)
 
 GsmConnection是一个tag，在new wake_lock的时候自行定义，通过pid可以确定其所在的服务进程。
 
@@ -70,7 +70,7 @@ GsmConnection是一个tag，在new wake_lock的时候自行定义，通过pid可
 
 查看是由哪个应用发出的通知。比如你用着手机的时候出来一个神烦的广告，但是你却不知道它是哪个应用弹出的，那去卸载哪个应用呢？
 
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_notification.gif)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_notification.gif)
 
 我们截图输出结果的一部分
 ```xml
@@ -90,7 +90,7 @@ NotificationRecord(0x01b93b62: pkg=com.tencent.mobileqq user=UserHandle{0} id=12
 ## 查看SurfaceFlinger：
 `adb shell dumpsys SurfaceFlinger`
 
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_surfaceflinger.png)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_surfaceflinger.png)
 
 用来查看当前界面上有几个frame，分别的源是什么。手机界面莫名其妙弹出一个dialog？试试这个命令吧，可以看到是由那个进程的那个Activity弹出的。
 
@@ -98,11 +98,11 @@ NotificationRecord(0x01b93b62: pkg=com.tencent.mobileqq user=UserHandle{0} id=12
 `adb shell dumpsys wifi`
 
 这个厉害了，可以看看他/她有没有连过闺蜜/老王加的wifi！
-￼
+
 ![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_wifi1.png)
 
 最后一个乱码，因为是中文wifi，不过后面也可以看到中文名
-￼
+
 ![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_wifi2.png)
 
 可以看到很多信息的，自己去发掘吧（密码没有，要看密码去看系统文件吧）。
@@ -114,11 +114,11 @@ NotificationRecord(0x01b93b62: pkg=com.tencent.mobileqq user=UserHandle{0} id=12
 一般来说，处于视频电话的时候，屏幕应该保持常亮的，这样才能方便用户查看视频内容。  
 问题出现的时候根据以往的经验，知道这很有可能是某个wake_lock没有申请到，比较MO和MT的wake_lock看到：
 `adb shell dumpsys power`
-￼
+
 ![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_MOMT_POWER.png)
 
 Mt端少了SCREEN_BRIGHT_WAKE_LOCK，而它在PowerManager.java中的定义正是：
-￼
+
 ![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_powermanager_code.png)
 
 直接搜关键字SCREEN_BRIGHT_WAKE_LOCK没有在InCallUI，Telecomm，Telephony搜到相关的wake_lock类型，但是我们看到这个wake_lock和FLAG_KEEP_SCREEN_ON有联系，多数应用都是用的这个flag，那么我们再搜这个关键字的收，就在InCallUI中找到了出问题的地方，找到问题了就好改啦~
@@ -128,12 +128,12 @@ Mt端少了SCREEN_BRIGHT_WAKE_LOCK，而它在PowerManager.java中的定义正�
 
 用下面的命令可以查看
 
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_find_parent_activity.png)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_find_parent_activity.png)
 
 如果你觉得这个方法不是那么有必要，那你应该还没有遇见过没title没内容的dialog/斜眼笑  
 还有这个方法适合于大多数场景，但也有例外。比如这个顶层界面（不一定是dialog）上的东西不是从Activity中显示出来的，（纳尼哦？！居然有这种事？！）这时候可以尝试用`adb shell dumpsys SurfaceFlinger`，这个命令可以查看界面是由哪些内容绘制的（想知道原理的可以去看SurfaceFlinger机制）。
 
-￼![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_case_surfaceflinger.png)
+![这里写图片描述](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android/_image/dumpsys_case_surfaceflinger.png)
 
 上图的信息显示，当前界面有状态栏，导航栏，还有一个联想的com.lenovo.ideafriend/com.lenovo.ideafriend.alias.DialtactsActivity，那状态栏和导航栏都很好认，界面上剩下的就是那个DialtactsActivity了。
 

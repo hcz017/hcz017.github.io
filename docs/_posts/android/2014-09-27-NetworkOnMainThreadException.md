@@ -102,7 +102,7 @@ AsyncTask的必须被继承使用。子类至少覆盖一个方法（doInBackgro
 	 private class MyTask extends AsyncTask<Void, Void, Void> { ... }
 
 更多AsyncTask可以参看本博：[AsyncTaskde 的使用](http://codesimple.bitcron.com/post/android/asynctaskde-de-shi-yong "AsyncTaskde 的使用")
-##AsyncTask和Handler对比##
+## AsyncTask和Handler对比 ##
 
 至于哪个适合你的程序，看看下面的优缺点吧。
 

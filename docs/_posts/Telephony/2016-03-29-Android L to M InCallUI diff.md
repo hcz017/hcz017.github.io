@@ -5,8 +5,8 @@ tags: incallui Call
 title: 'InCallUI difference between L and M（草稿）'
 ---
 
-#新增或者修改的文件
-##新增
+# 新增或者修改的文件
+## 新增
 1. updateButtonsStateic_HD_24.dp
 新增了一个显示HD图标的资源文件，Reliance L上我们是自己画上去的，那么到M版本可能就用由官方提供的资源了。
 3. CircularRevealFragment.java
@@ -25,7 +25,7 @@ title: 'InCallUI difference between L and M（草稿）'
 * {@class CallSubstateNotifier} notifies it through the onCallSubstateChanged callback.
 */
 ```
-##更名
+## 更名
 1. AudioState.java - > CallAudioState.java Telecom
 2. InCallVideoCallListener.java(InCallVideoCallCallback)
 3. InCallVideoCallCallbackNotifier.java -> InCallVideoCallListenerNotifier.java
@@ -36,7 +36,7 @@ title: 'InCallUI difference between L and M（草稿）'
 7. dtmf_twelve_key_view.xml > incall_dialpad_fragment.xml （VT dialpad变化很大下面有个commit message可以参考下）
 1. InCallPhoneListener.java -> InCallServiceListener.java onAudioStateChanged从Phone.java移动到了InCallServiceImpl.java
 
-##内容变化
+## 内容变化
 增加录音功能（CM可能跟QCOM不一样）
 1. maybeAutoEnterFullscreen  高通貌似没有考虑hold state
 2. updateAudioMode() 中打开speaker的代码被注释了，使用InCallAudioManager管理，新代码里也没考虑hold 

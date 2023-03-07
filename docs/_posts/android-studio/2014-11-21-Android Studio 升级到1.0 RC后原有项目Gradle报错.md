@@ -31,7 +31,7 @@ renderscriptSupportMode->renderscriptSupportModeEnabled
 renderscriptNdkMode->renderscriptNdkModeEnabled
 
 ---
-#“Check out from GitHub”错误#
+# “Check out from GitHub”错误 #
 如果出现以下或其他错误提示的（错误图列不一一列举），请参照下面的说明解决。
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/QQ截图20141121180248.png)
 **解决方法：**
@@ -62,7 +62,7 @@ renderscriptNdkMode->renderscriptNdkModeEnabled
    注释掉runProguard，或者按照上面的说明修改属性名。如果漏了其他属性没有修改，点击OK后Android Studio 会给出相应的提示，`Gradle DSL method not found: “***()” ，把***()注释或修改就好了。`
 4. 如果有library文件（库）把库文件夹下的build.gradle做同3一样的修改。
 
-#原有的项目错误#
+# 原有的项目错误 #
 
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/android-studio/_image/gradlebaocuo.jpg)
 通常这时候“Jump to source”后把“runProguard()”（或其他的）删掉就好了。如果不行请尝试一下上面的1234步骤。
