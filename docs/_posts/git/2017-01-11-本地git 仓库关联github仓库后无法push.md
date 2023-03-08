@@ -2,6 +2,7 @@
 date: 2017-01-11 11:30
 status: public
 title: 本地git 仓库关联github仓库后无法push
+tags: git
 ---
 
 在Github上新建一个仓库后有以下指导

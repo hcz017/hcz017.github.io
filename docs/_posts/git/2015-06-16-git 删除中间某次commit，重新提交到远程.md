@@ -2,6 +2,7 @@
 date:  2015-06-16 10:42
 status: public
 title: 'git 删除中间某次commit，重新提交到远程'
+tags: git
 ---
 
 **问题现象：**

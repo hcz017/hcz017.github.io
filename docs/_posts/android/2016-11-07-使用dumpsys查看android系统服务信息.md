@@ -1,6 +1,7 @@
 ---
 date:   2016-11-07 17:30
 title:  '使用dumpsys查看android系统服务信息'
+tags: 命令
 ---
 
 
