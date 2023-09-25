@@ -1,15 +1,42 @@
 ---
-date:  2016-04-18 20:12
+date: 2016-04-18 20:12
+Tags:
+  - ims
 status: draft
-title: 'IMS Modify Call'
+title: IMS Modify Call (1) send request 发出升级视频请求
 ---
 
+QCOM IMS ModifyCall (1) send upgrade/downgrade request
+
+upgrade/downgrade 升降级，其实就是ModifyCall
+
+# 整体示意
+
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/IMS_modify%20call%20show.jpg)
+图中有两种情况，一种是MT对收到的升级请求做出响应，一种是超时后服务器给双发发送消息。
+一个完整的Modify call(upgrade)可以分为4个部分，本文主要讲第一部分发出升级请求。
+
+看一下实际效果图，这个号码是印度的哦大家不要随便打（08.26更新，我们的代码中界面已经修改了）。
+
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/IMS_MdifyCall.gif)
+
+# 流程图
+
+![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/Telephony/_image/IMS_MdifyCall.jpg)
 界面入手
+
+## packages/apps/InCallUI
+
 packages/apps/InCallUI/src/com/android/incallui/CallButtonFragment.java
+
 CallButtonFragment.java onClick()
+
 ```java
 case R.id.changeToVideoButton:
-...
+   if (call == null) {
+       Log.i(this, "Call was null");
+       return;
+   }
    if (getResources().getBoolean(R.bool.config_regional_number_patterns_video_call) && //默认为false
        !CallUtil.isVideoCallNumValid(call.getNumber())) {
        Toast.makeText(this.getActivity(),
@@ -20,7 +47,8 @@ case R.id.changeToVideoButton:
    break;
 ```
 
-packages/apps/InCallUI/src/com/android/incallui/CallButtonPresenter.java 
+packages/apps/InCallUI/src/com/android/incallui/CallButtonPresenter.java
+
 changeToVideoClicked()
 
 本来还有一个changeToVoiceClick()的，不过没有使用。
@@ -46,8 +74,11 @@ public void changeToVideoClicked() {
    mCall.setSessionModificationState(Call.SessionModificationState.WAITING_FOR_RESPONSE);
 }
 ```
+
 packages/apps/InCallUI/src/com/android/incallui/QtiCallUtils.java
+
 QtiCallUtils.java
+
 ```java
 /**
 * Checks the boolean flag in config file to figure out if we are going to use Qti extension or
@@ -60,14 +91,28 @@ public static boolean useExt(Context context) {
    return context != null && context.getResources().getBoolean(R.bool.video_call_use_ext); //默认为true
 }
 ```
-displayModifyCallOptions()
+
+displayModifyCallOptions() 显示选项（早先是在overflow menu中有个modify call选项，点击后弹出4个选项供选择）
+
 ```java
 /**
 * The function is called when Modify Call button gets pressed. The function creates and
 * displays modify call options.
 */
+
 public static void displayModifyCallOptions(final Call call, final Context context) {
-  //一些判断条件
+   //一些判断条件
+   if (call == null) {
+       Log.d(LOG_TAG, "Can't display modify call options. Call is null");
+       return;
+   }
+
+   if (isTtyEnabled(context)) {
+       Log.w(LOG_TAG, "Call session modification is allowed only when TTY is off.");
+       displayToast(context, R.string.video_call_not_allowed_if_tty_enabled);
+       return;
+   }
+
    if (context.getResources().getBoolean(
            R.bool.config_enable_enhance_video_call_ui)) {    //false，后面可能会改。这里会影响到CallButton，见下面解释
        // selCallType is set to -1 default, if the value is not updated, it is unexpected.
@@ -121,12 +166,16 @@ public static void displayModifyCallOptions(final Call call, final Context conte
    final int index = itemToCallType.indexOf(currUnpausedVideoState);
    builder.setSingleChoiceItems(items.toArray(new CharSequence[0]), index, listener);
    alert = builder.create();
-   alert.show();//显示alert dialog
+   alert.show(); //显示alert dialog
 }
 ```
+
 关于 R.bool.config_enable_enhance_video_call_ui 这个值，如果为true的话，modify的几个选项会会直接在CalButton上显示（通常是在overFlow menu里）。ehhance UI嘛，就是直接在UI上把那些发送，接收，双向的button或者选项列出来。
+
 changeToVideoClicked()
+
 这个方法同时也被 downgradeToVoiceCall()调用了。可见这部分不能光看方法名字理解它的作用了。
+
 ```java
 /**
 * Sends a session modify request to the telephony framework
@@ -141,8 +190,11 @@ private static void changeToVideoClicked(Call call, VideoProfile videoProfile) {
    InCallAudioManager.getInstance().onModifyCallClicked(call, videoProfile.getVideoState());//同步更改Audio状态，InCallAudioManager可看之前的博客
 }
 ```
-frameworks/base/telecomm/java/android/telecom/VideoCallImpl.java
+
+## frameworks/base/telecomm/java/android/telecom/VideoCallImpl.java
+
 VideoCallImpl.java
+
 ```java
 /**
 * Sends a session modification request to the video provider.
@@ -159,14 +211,16 @@ VideoCallImpl.java
 public void sendSessionModifyRequest(VideoProfile requestProfile) {
    try {
        VideoProfile originalProfile = new VideoProfile(mCall.getDetails().getVideoState(),
-               mVideoQuality);//拿到当前的状态，为什么要当前的？
+               mVideoQuality);//拿到当前的状态，为什么要当前的？（这个问题在后面有解答，但是被我删掉了。。在高通私有代码部分是没有用到这个参数的，只用了requestProfile）
 
        mVideoProvider.sendSessionModifyRequest(originalProfile, requestProfile);
    } catch (RemoteException e) {
    }
 }
 ```
+
 frameworks/base/telecomm/java/android/telecom/Connection.java
+
 VideoProviderBinder
 
 ```java
@@ -183,7 +237,9 @@ private final class VideoProviderBinder extends IVideoProvider.Stub {
     }
 }
 ```
+
 VideoProviderHandler
+
 ```java
 case MSG_SEND_SESSION_MODIFY_REQUEST: {
    SomeArgs args = (SomeArgs) msg.obj;
@@ -196,7 +252,10 @@ case MSG_SEND_SESSION_MODIFY_REQUEST: {
    break;
 }
 ```
+
 frameworks/base/telecomm/java/android/telecom/Connection.java
+处理modify请求，判断请求是否可用等。
+
 ```java
 /**
 * Issues a request to modify the properties of the current video session.
@@ -223,8 +282,11 @@ frameworks/base/telecomm/java/android/telecom/Connection.java
 public abstract void onSendSessionModifyRequest(VideoProfile fromProfile,
        VideoProfile toProfile);
 ```
-frameworks/opt/net/ims/src/java/com/android/ims/internal/ImsVideoCallProviderWrapper.java
-重写
+
+## frameworks/opt/net/ims/src/java/com/android/ims/internal/ImsVideoCallProviderWrapper.java
+
+重写方法
+
 ```java
 /** @inheritDoc */
 public void onSendSessionModifyRequest(VideoProfile fromProfile, VideoProfile toProfile) {
@@ -234,7 +296,9 @@ public void onSendSessionModifyRequest(VideoProfile fromProfile, VideoProfile to
    }
 }
 ```
+
 frameworks/opt/net/ims/src/java/com/android/ims/internal/ImsVideoCallProvider.java
+
 ```java
 public void sendSessionModifyRequest(VideoProfile fromProfile, VideoProfile toProfile) {
    SomeArgs args = SomeArgs.obtain();
@@ -243,7 +307,9 @@ public void sendSessionModifyRequest(VideoProfile fromProfile, VideoProfile toPr
    mProviderHandler.obtainMessage(MSG_SEND_SESSION_MODIFY_REQUEST, args).sendToTarget();
 }
 ```
+
 mProviderHandler
+
 ```java
 /**
 * Default handler used to consolidate binder method calls onto a single thread.
@@ -257,7 +323,7 @@ private final Handler mProviderHandler = new Handler(Looper.getMainLooper()) {
            try {
                VideoProfile fromProfile = (VideoProfile) args.arg1;
                VideoProfile toProfile = (VideoProfile) args.arg2;
-        
+
                onSendSessionModifyRequest(fromProfile, toProfile);
            } finally {
                args.recycle();
@@ -267,121 +333,42 @@ private final Handler mProviderHandler = new Handler(Looper.getMainLooper()) {
     ...
     }
 ```
-vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/vt/ImsVideoCallProviderImpl.java
-```java
-@Override
-public void onSendSessionModifyRequest(VideoProfile fromProfile, VideoProfile toProfile) {
-   log("onSendSessionModifyRequest, videoState=" + toProfile.getVideoState()
-           + " quality= " + toProfile.getQuality());
-   mRequestProfile = toProfile;
-   if (!isSessionValid()) return;
 
-   // If video pause is requested ignore the call type//用toProfile判断是不是暂停视频的请求
-   if (isVideoPauseRequested(toProfile)) {
-       mImsCallModification.changeConnectionType(null, CallDetails.CALL_TYPE_VT_PAUSE, null);
-   } else if (mImsCallModification.isLocallyPaused()) {
-       // If UE is locally paused, means that this is a resume request//如果当前是暂停状态，那么新的请求就是恢复视频
-       mImsCallModification.changeConnectionType(null, CallDetails.CALL_TYPE_VT_RESUME, null);
-   } else {
-       // Neither pause or resume, so this is upgrade/downgrade request//既不是暂停也不是恢复 那就应该是升级/降级的请求。
-       Message newMsg = mHandler.obtainMessage(EVENT_SEND_SESSION_MODIFY_REQUEST_DONE);
-       int callType = ImsCallUtils.convertVideoStateToCallType(toProfile.getVideoState());
-       mImsCallModification.changeConnectionType(newMsg, callType, null);
-   }//果然fromProfile没有用到么 o_o
-}
+## vendor/qcom/proprietary/telephony-apps/ims/src/com/qualcomm/ims/vt/ImsVideoCallProviderImpl.java
+
+高通私有代码，不贴了，一般也不会改下层的。
+
+# 关键log
+
+MO log
+
+```xml
+03-01 00:12:52.872  4918  4918 D VideoCall_ImsVideoCallProviderImpl: (1) onSendSessionModifyRequest, videoState=0 quality= 4//请求转换为 AUDIO_ONLY
+03-01 00:12:52.873  4918  4918 D VideoCall_ImsCallModification: validateOutgoingModifyConnectionType newCallType=0//CalllType 和videoState对应
+03-01 00:12:52.873  4918  4918 D VideoCall_ImsCallModification: validateOutgoingModifyConnectionType modifyToCurrCallType = false isIndexValid = true isLowBattery = false
+03-01 00:12:52.873  4918  4918 V ImsSenderRxr: modifyCallInitiate callModify=  1  0 2 callSubState 0 videoPauseState2 mediaId-1 Local Ability  Peer Ability  Cause code 0 0[SUB1]
+03-01 00:12:52.873  4918  4918 V ImsSenderRxr: setCallModify callModify=  1  0 2 callSubState 0 videoPauseState2 mediaId-1 Local Ability  Peer Ability  Cause code 0 0[SUB1]
+03-01 00:12:52.873  4918  4918 D ImsSenderRxr: [0043]> MODIFY_CALL_INITIATE[SUB1]
+03-01 00:12:53.757  4918  5512 D ImsSenderRxr: [0043]< MODIFY_CALL_INITIATE [SUB1]
+03-01 00:12:53.758  4918  4918 D VideoCall_ImsCallModification: EVENT_MODIFY_CALL_INITIATE_DONE received
+03-01 00:12:53.758  4918  4918 D VideoCall_ImsCallModification: clearPendingModify imsconn=org.codeaurora.ims.ImsCallModification@1ea212
+03-01 00:12:53.758  4918  4918 D VideoCall_ImsVideoCallProviderImpl: (1) handleSessionModifyDone msg.what=0 //
+03-01 00:12:53.758  4918  4918 D VideoCall_ImsVideoCallProviderImpl: (1) Session modify success//成功切换
+
+//upgrade
+03-01 00:12:58.120  4918  4918 D VideoCall_ImsVideoCallProviderImpl: (1) onSendSessionModifyRequest, videoState=3 quality= 4
+03-01 00:12:58.120  4918  4918 D VideoCall_ImsCallModification: validateOutgoingModifyConnectionType newCallType=3//CalllType 和videoState对应
+03-01 00:12:58.120  4918  4918 D VideoCall_ImsCallModification: validateOutgoingModifyConnectionType modifyToCurrCallType = false isIndexValid = true isLowBattery = false
+03-01 00:12:58.120  4918  4918 V ImsSenderRxr: modifyCallInitiate callModify=  1  3 2 callSubState 0 videoPauseState2 mediaId-1 Local Ability  Peer Ability  Cause code 0 0[SUB1]
+03-01 00:12:58.120  4918  4918 V ImsSenderRxr: setCallModify callModify=  1  3 2 callSubState 0 videoPauseState2 mediaId-1 Local Ability  Peer Ability  Cause code 0 0[SUB1]
+03-01 00:12:58.120  4918  4918 D ImsSenderRxr: [0044]> MODIFY_CALL_INITIATE[SUB1]
+03-01 00:13:02.989  4918  5512 D ImsSenderRxr: [0044]< MODIFY_CALL_INITIATE [SUB1]
+03-01 00:13:02.989  4918  4918 D VideoCall_ImsCallModification: EVENT_MODIFY_CALL_INITIATE_DONE received
+03-01 00:13:02.989  4918  4918 D VideoCall_ImsCallModification: clearPendingModify imsconn=org.codeaurora.ims.ImsCallModification@1ea212
+03-01 00:13:02.990  4918  4918 D VideoCall_ImsVideoCallProviderImpl: (1) handleSessionModifyDone msg.what=0
+03-01 00:13:02.990  4918  4918 D VideoCall_ImsVideoCallProviderImpl: (1) Session modify success
 ```
-转换关系举例
-case VideoProfile.STATE_AUDIO_ONLY:
-   callType = CallDetails.CALL_TYPE_VOICE;
-vendor/qcom/proprietary/telephony-apps/ims/src/org/codeaurora/ims/ImsCallModification.java
-```java
 
-// MODIFY_CALL_INITIATE
-public void changeConnectionType(Message msg, int newCallType, Map<String, String> newExtras)
-{
-   log("changeConnectionType " + " newCallType=" + newCallType + " newExtras= "
-           + newExtras);
-   // mImsCallProfile = mImsCallSessionImpl.getCallId().getCallProfile();
-   mIndex = Integer.parseInt(mImsCallSessionImpl.getCallId());
-   if (isVTMultitaskRequest(newCallType)) {
-       // Video pause/resume request
-       triggerOrQueueVTMultitask(newCallType);
-   } else {
-       // Regular upgrade/downgrade request
-       if (isAvpRetryAllowed() && ImsCallUtils.isVideoCallTypeWithDir(newCallType)) {
-           mAvpCallType = newCallType;
-       }
+# 小结
 
-       Message newMsg = mHandler.obtainMessage(EVENT_MODIFY_CALL_INITIATE_DONE, msg);
-       if (callModifyRequest == null) {
-           if (validateOutgoingModifyConnectionType(newMsg, newCallType)) {
-               modifyCallInitiate(newMsg, newCallType, newExtras);//看这里
-           }
-       } else {
-           Log.e(LOG_TAG,
-                   "videocall changeConnectionType: not invoking modifyCallInitiate "
-                           + "as there is pending callModifyRequest="
-                           + callModifyRequest);
-
-           String errorStr = "Pending callModifyRequest so not sending modify request down";
-           RuntimeException ex = new RuntimeException(errorStr);
-           if (msg != null) {
-               AsyncResult.forMessage(msg, null, ex);
-               msg.sendToTarget();
-           }
-
-       }
-   }
-}
-```
-modifyCallInitiate
-```java
-private void modifyCallInitiate(Message newMsg, int newCallType, Map<String, String> newExtras)
-{
-   if (!ImsCallUtils.isValidRilModifyCallType(newCallType)) {//判断请求的目标类型是支持的
-       loge("modifyCallInitiate not a Valid RilCallType" + newCallType);
-       return;
-   }
-
-   /*
-    * CallDetails callDetails = new CallDetails(newCallType, getCallDetails().call_domain,
-    * CallDetails.getExtrasFromMap(newExtras));
-    */
-   CallDetails callDetails = new CallDetails(newCallType, mImsCallSessionImpl.getCallDomain(),
-           CallDetails.getExtrasFromMap(newExtras));
-   CallModify callModify = new CallModify(callDetails, mIndex);
-   // Store the outgoing modify call request in the connection
-   if (callModifyRequest != null) {
-       log("Overwriting callModifyRequest: " + callModifyRequest + " with callModify:"
-               + callModify);
-   }
-   callModifyRequest = callModify;
-   mCi.modifyCallInitiate(newMsg, callModify);
-}
-```
-vendor/qcom/proprietary/telephony-apps/ims/src/org/codeaurora/ims/ImsSenderRxr.java
-```java
-public void modifyCallInitiate(Message result, CallModify callModify) {
-   logv("modifyCallInitiate callModify= " + callModify);//log
-   byte[] callModifyb = setCallModify(callModify);
-   encodeMsg(ImsQmiIF.REQUEST_MODIFY_CALL_INITIATE, result, callModifyb);//编码并发送
-}
-```
-```java
-private byte[] setCallModify(CallModify callModify) {
-   logv("setCallModify callModify= " + callModify);//log
-   ImsQmiIF.CallDetails callDetailsIF = new ImsQmiIF.CallDetails();
-   callDetailsIF.setCallType(callModify.call_details.call_type);
-   callDetailsIF.setCallDomain(callModify.call_details.call_domain);
-
-   ImsQmiIF.CallModify callModifyIF = new ImsQmiIF.CallModify();
-   callModifyIF.setCallDetails(callDetailsIF);
-   callModifyIF.setCallIndex(callModify.call_index);
-
-   // This field is not used for outgoing requests.
-   // callModifyIF.setError(callModify.error);
-
-   byte[] callModifyb = callModifyIF.toByteArray();
-   return callModifyb;
-}
-```
+InCallUI会根据客户要求进行修改，建议提前熟悉代码，底层基本上不用动，大概跟一下流程就可以了。如果要改bug的话，底层的关键log还是要熟悉，尤其是关键log中携带的参数的意义。这个后面的博客中会提到。
