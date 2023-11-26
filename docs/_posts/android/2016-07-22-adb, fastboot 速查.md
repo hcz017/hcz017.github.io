@@ -121,13 +121,18 @@ adb shell setprop log.tag.InCall V
 ## 调整动画
 
 ```shell
+# 调慢 0.75x
 adb shell settings put global window_animation_scale 0.75
 adb shell settings put global transition_animation_scale 0.75
 adb shell settings put global animator_duration_scale 0.75
-
+# 恢复成 1.0x
 adb shell settings put global window_animation_scale 1
 adb shell settings put global transition_animation_scale 1
 adb shell settings put global animator_duration_scale 1
+# 调快到 1.25x
+adb shell settings put global window_animation_scale 1.25
+adb shell settings put global transition_animation_scale 1.25
+adb shell settings put global animator_duration_scale 1.25
 ```
 
 # 常用fastboot命令

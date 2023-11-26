@@ -1,7 +1,7 @@
 ---
 date: 2017-02-10 14:19
 status: public
-layout: page
+; layout: 
 ---
 
 ## 以前
