@@ -1,7 +1,7 @@
 ---
 title: Notification 简单使用
 date: 2014-12-08 19:33
-statu: draft
+status: draft
 ---
 
 Android Notification 简单使用，java代码如下：
