@@ -10,6 +10,7 @@ title: 记 python opencv 没有指定参数名导致参数不生效的问题
 **省流**：在使用opencv remap 函数时，需要明确指定参数名才能正确应用参数。
 
 在验证OpenCV remap 函数时，有一个参数的含义是复制边缘像素（BORDER_REPLICATE），也就是在无效像素区域重复复制有效像素的边缘，看起来有点像拉丝一样的效果。恰巧有一份 C++ 的代码用的就是这个参数，我在将它写成python 版本时却发现得不到一样的结果。
+
 C++ 结果：
 
 ![](https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/boardMode_1.jpg)
