@@ -1,7 +1,7 @@
 ---
 Date: 2024-02-19
 tags:
-  - OpenC
+  - OpenCV
   - remap
   - boardMode
 title: 记 python opencv 没有指定参数名导致参数不生效的问题
