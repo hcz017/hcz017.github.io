@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Controller</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        .image-stack {
+            position: relative;
+            width: 640px;
+            height: 480px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-stack img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            transition: transform 0.05s ease, opacity 0.05s ease;
+            transform-origin: center
+        }
+
+        .center-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 7px;
+            height: 7px;
+            background-color: red;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        /* 初始时，顶部图片不透明 */
+        .top-image {
+            opacity: 1;
+        }
+
+        #zoomSlider {
+            width: 300px;
+            /* 设置滑块长度为300像素 */
+            /* 其他样式 */
+            margin: 20px 0;
+            /* 上下边距 */
+        }
+
+        #SATzoomSlider {
+            width: 300px;
+            /* 设置滑块长度为300像素 */
+            /* 其他样式 */
+            margin: 20px 0;
+            /* 上下边距 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="image-stack">
+        <img src="https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/input_image.jpg" alt="Background Image" class="bottom-image" id="zoomableImageTele">
+        <img src="https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/input_image.jpg" alt="Zoomable Image" class="top-image" id="zoomableImage">
+        <div class="center-marker"></div>
+    </div>
+    <!-- <input type="range" id="zoomSlider" min="1" max="4" value="1" step="0.05">
+    <label for="zoomSlider">Zoom</label> -->
+    <!-- 实时显示zoom值的元素 -->
+    <div id="zoomLevelDisplay">Zoom: 1.0</div><br>
+
+    <input type="range" id="zoomSlider" min="1" max="5" value="1" step="0.05">
+    <label for="zoomSlider">中心放大 Zoom</label><br><br>
+
+    <label for="shiftStartLevel">起始平移倍率</label>
+    <input type="number" id="shiftStartLevel" min="1.0" max="2" value="1.5" step="0.1"><br>
+
+    <input type="range" id="SATzoomSlider" min="1" max="5" value="1" step="0.05">
+    <label for="SATzoomSlider">SAT 平移放大 Zoom</label>
+
+    <!-- <script src="script.js"></script> -->
+    <script>
+        document.getElementById('zoomSlider').addEventListener('input', function () {
+            var zoomLevel = parseFloat(this.value);
+            var topImage = document.getElementById('zoomableImage');
+
+            // 应用缩放  
+            topImage.style.transform = `scale(${zoomLevel})`;
+
+            // 当缩放级别改变时，更新显示的zoom值  
+            zoomLevelDisplay.textContent = `Zoom: ${zoomLevel.toFixed(1)}`; // 使用toFixed来格式化小数  
+
+            // 当缩放级别达到2.0时，设置图片为透明  
+            if (zoomLevel >= 2.1) {
+                topImage.style.opacity = 0; // 或者完全透明：topImage.style.opacity = 0;  
+                var teleImage = document.getElementById('zoomableImageTele');
+                teleImage.style.transform = `scale(${zoomLevel / 2})`;
+
+            } else {
+                // 否则，确保图片是不透明的  
+                topImage.style.opacity = 1;
+            }
+        });
+
+        document.getElementById('SATzoomSlider').addEventListener('input', function () {
+            var zoomLevel = parseFloat(this.value);
+            var topImage = document.getElementById('zoomableImage');
+
+            // 当缩放级别改变时，更新显示的zoom值  
+            zoomLevelDisplay.textContent = `Zoom: ${zoomLevel.toFixed(1)}`; // 使用toFixed来格式化小数  
+            var shiftStartLevel = document.getElementById('shiftStartLevel').value;
+            if (zoomLevel < shiftStartLevel) {
+                // 1 中心放大    
+                topImage.style.transform = `scale(${zoomLevel})`;
+            } else {
+                // 2 平移+放大
+                translateX = -13 * (zoomLevel - shiftStartLevel) / (2.0 - shiftStartLevel);
+                translateY = 18 * (zoomLevel - shiftStartLevel) / (2.0 - shiftStartLevel);
+                topImage.style.transform = `scale(${zoomLevel}) translateX(${translateX}px) translateY(${translateY}px)`;
+            }
+
+            // 切换
+            if (zoomLevel >= 2.1) {
+                topImage.style.opacity = 0; // 或者完全透明：topImage.style.opacity = 0;  
+                var teleImage = document.getElementById('zoomableImageTele');
+                teleImage.style.transform = `scale(${zoomLevel / 2})`;
+
+            } else {
+                // 否则，确保图片是不透明的  
+                topImage.style.opacity = 1;
+            }
+        });
+    </script>
+</body>
+
+</html>
