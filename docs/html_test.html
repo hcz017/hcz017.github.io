@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Controller</title>
+    <title> SAT 切换镜头模拟</title>
     <!-- <link rel="stylesheet" href="style.css"> -->
     <style>
         .image-stack {
@@ -23,7 +23,7 @@
             left: 0;
             width: 100%;
             height: auto;
-            transition: transform 0.05s ease, opacity 0.05s ease;
+            /* transition: transform 0.05s ease, opacity 0.05s ease; */
             transform-origin: center
         }
 
@@ -63,24 +63,29 @@
 </head>
 
 <body>
+    <div>
+        <p>假设现在有 wide 和 tele 两颗摄像头，由于它们光心不重合，所以拍到的图像的中心必定也不重合。</p>
+        <p>因此在对 wide 进行中心放大之后切换到 tele 时会看到画面中心跳变,就如同下面"中心放大Zoom" 的操作。</p>
+        <p>SAT 可以计算非中心裁剪框，使得裁剪出的 wide 的中心随着 zoomratio 增大逐渐靠近 tele 的中心，在切换到 tele 的前一刻和 tele 中心重合，切换前后画面中心一致，达到平滑切换的效果。</p>
+    </div>
     <div class="image-stack">
-        <img src="https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/input_image.jpg" alt="Background Image" class="bottom-image" id="zoomableImageTele">
-        <img src="https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/input_image.jpg" alt="Zoomable Image" class="top-image" id="zoomableImage">
+        <img src="https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/sat_sim_tele.jpg" alt="Background Image" class="bottom-image" id="zoomableImageTele">
+        <img src="https://codesimple-blog-images.oss-cn-hangzhou.aliyuncs.com/other/_image/sat_sim_wide.jpg" alt="Zoomable Image" class="top-image" id="zoomableImage">
         <div class="center-marker"></div>
     </div>
     <!-- <input type="range" id="zoomSlider" min="1" max="4" value="1" step="0.05">
     <label for="zoomSlider">Zoom</label> -->
     <!-- 实时显示zoom值的元素 -->
-    <div id="zoomLevelDisplay">Zoom: 1.0</div><br>
+    <div id="zoomLevelDisplay">Zoomratio: 1.0x</div><br>
 
     <input type="range" id="zoomSlider" min="1" max="5" value="1" step="0.05">
-    <label for="zoomSlider">中心放大 Zoom</label><br><br>
+    <label for="zoomSlider">wide 中心放大 Zoom</label><br><br>
 
-    <label for="shiftStartLevel">起始平移倍率</label>
+    <label for="shiftStartLevel">起始平移倍率:</label>
     <input type="number" id="shiftStartLevel" min="1.0" max="2" value="1.5" step="0.1"><br>
 
     <input type="range" id="SATzoomSlider" min="1" max="5" value="1" step="0.05">
-    <label for="SATzoomSlider">SAT 平移放大 Zoom</label>
+    <label for="SATzoomSlider">wide 平移放大 Zoom(SAT)</label>
 
     <!-- <script src="script.js"></script> -->
     <script>
@@ -92,7 +97,7 @@
             topImage.style.transform = `scale(${zoomLevel})`;
 
             // 当缩放级别改变时，更新显示的zoom值  
-            zoomLevelDisplay.textContent = `Zoom: ${zoomLevel.toFixed(1)}`; // 使用toFixed来格式化小数  
+            zoomLevelDisplay.textContent = `Zoomratio: ${zoomLevel.toFixed(1)}x`; // 使用toFixed来格式化小数  
 
             // 当缩放级别达到2.0时，设置图片为透明  
             if (zoomLevel >= 2.1) {
